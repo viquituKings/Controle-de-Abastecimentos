@@ -1,8 +1,8 @@
 {
-  "name": "controle-de-abastecimentos",
+  "name": "Controle de Abastecimentos",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Reis Software",
+  "homepage": "",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -57,5 +57,5 @@
     "ts-node": "~8.3.0",
     "typescript": "~4.7.3"
   },
-  "description": "An Ionic project"
+  "description": "Aplicativo para controlar abastecimentos de veículos"
 }

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Cadastrar Veículos</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-item>
+    <ion-label>Digite a placa do veículo:</ion-label>
+    <ion-input [(ngModel)]="inpPlaca1" placeholder="AAA" type="text" maxlength="3" minlength="3" required></ion-input>
+    <ion-label> - </ion-label>
+    <ion-input [(ngModel)]="inpPlaca2" placeholder="1A34" type="text" maxlegth="4" minlength="4" required></ion-input>
+  </ion-item>
+
+  <ion-label>Selecione o tipo do veículo:</ion-label>
+  <ion-radio-group [(ngModel)]="radioTipoVeiculo" required="true">
+    <ion-item>
+      <ion-item>
+        <ion-label>Carro</ion-label>
+        <ion-radio value="carro" slot="start"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Moto</ion-label>
+        <ion-radio value="moto" slot="start"></ion-radio>
+      </ion-item>
+    </ion-item>
+  </ion-radio-group>
+  <ion-item>
+    <ion-label position="floating">Marca do veículo</ion-label>
+    <ion-select [(ngModel)]="selectMarcaCadastro" okText="Pronto!" cancelText="Cancelar" required="true">
+      
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Modelo do veículo</ion-label>
+    <ion-select [(ngModel)]="selectModeloCadastro" okText="Pronto!" cancelText="Cancelar" required="true">
+
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Digite o ano do veículo:</ion-label>
+    <ion-input [(ngModel)]="inpAnoVeiculoCadastro" type="number" max=2099 min=1900 required="true"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Digite o Km Atual do veículo:</ion-label>
+    <ion-input [(ngModel)]="inpKmAtualCadastro" type="number" required="true"></ion-input>
+  </ion-item>
+
+  <ion-button color="success" fill="outline" expand="block">Cadastrar</ion-button>
+  <ion-button color="danger" fill="outline" expand="block" (click)="toHome()">Cancelar</ion-button>
+
+</ion-content>

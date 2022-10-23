@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Cadastrar Abastecimentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-item>
+    <ion-label position="floating">Selecione o veículo</ion-label>
+    <ion-select [(ngModel)]="selectVeiculoCadAbast" okText="Pronto!" cancelText="Cancelar" required>
+
+    </ion-select>
+  </ion-item>
+
+  <ion-radio-group>
+    <ion-label>Selecione o tipo de combustível abastecido</ion-label>
+    <ion-item>
+      <ion-label>Gasolina</ion-label>
+      <ion-radio slot="start" value="gasolina"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Etanol</ion-label>
+      <ion-radio slot="start" value="etanol"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Diesel</ion-label>
+      <ion-radio slot="start" value="diesel"></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+
+  <ion-item>
+    <ion-label position="floating">Ultimo Km:</ion-label>
+    <ion-input [(ngModel)]="inpUltimoKmCadAbast" [readonly]="true"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Km Atual:</ion-label>
+    <ion-input [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label position="floating">Quantidade Abastecida (Litros)</ion-label>
+    <ion-input [(ngModel)]="inpQtdAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Valor do litro (R$)</ion-label>
+    <ion-input [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
+  </ion-item>
+
+  <ion-button color="success" fill="outline" expand="block">cadastrar</ion-button>
+  <ion-button color="danger" fill="outline" expand="block" (click)="toHome()">cancelar</ion-button>
+</ion-content>
