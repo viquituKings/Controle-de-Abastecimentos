@@ -1,3 +1,5 @@
+import { NavController } from '@ionic/angular';
+import { getAuth, signOut } from 'firebase/auth';
 import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
@@ -12,5 +14,20 @@ export class AppComponent {
     { title: 'Seus Veículos', url: 'exibir-veiculos', icon: 'car'},
     { title: 'Seus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud'},
   ];
-  constructor() {}
+  constructor(public navCtrl : NavController) {}
+
+  auth = getAuth()
+
+  logout(){
+    signOut(this.auth).then((sucesso) => {
+      console.log("logout com sucesso")
+      this.toLogin()
+    }).catch((erro) => {
+      console.log("falha no logout")
+    })
+  }
+
+  toLogin(){
+    this.navCtrl.navigateForward("login")
+  }
 }
