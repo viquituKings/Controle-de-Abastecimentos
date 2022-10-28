@@ -10,6 +10,14 @@ export class VeiculosPage implements OnInit {
 
   constructor(public menuCtrl : MenuController, public navCtrl : NavController) { }
 
+  inpPlaca1 : string = ""
+  inpPlaca2 : string = ""
+  radioTipoVeiculo : string = ""
+  selectMarca : string = ""
+  selectModelo : string = ""
+  inpAnoVeiculo : number = 0
+  inpKmAtual : number = 0
+
   ngOnInit() {
     this.menuCtrl.enable(true)
   }
@@ -17,5 +25,9 @@ export class VeiculosPage implements OnInit {
   toHome(){
     //metodo para retornar à home em caso de cancelamento do cadastro
     this.navCtrl.navigateForward("home")
+  }
+
+  cadastrar(){
+
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 
 
 @Component({
@@ -19,6 +19,12 @@ export class LoginPage implements OnInit {
   
   ngOnInit() {
     this.menuCtrl.enable(false)
+    onAuthStateChanged(this.auth, (user) => {
+      if(user){
+        console.log(`usuario ${user.email} logado`)
+        this.navCtrl.navigateForward("home")
+      }
+    })
   }
 
   toCadastro(){
