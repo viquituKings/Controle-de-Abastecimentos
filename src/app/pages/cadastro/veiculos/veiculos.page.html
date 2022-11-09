@@ -29,7 +29,7 @@
   <ion-item>
     <ion-label position="floating">Marca do veículo</ion-label>
     <ion-select [(ngModel)]="selectMarca" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="carregarModelos()">
-      <ion-select-option  *ngFor="let marca of marcas"  value="{{marca.nomeMarca}}">{{marca.nomeMarca}}</ion-select-option>
+      <ion-select-option  *ngFor="let marca of marcas"  value="{{marca.valor}}">{{marca.nomeMarca}}</ion-select-option>
     </ion-select>
   </ion-item>
 
