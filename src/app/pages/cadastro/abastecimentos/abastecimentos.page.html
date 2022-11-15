@@ -8,40 +8,50 @@
 
   <ion-item>
     <ion-label position="floating">Selecione o veículo</ion-label>
-    <ion-select [(ngModel)]="selectVeiculoCadAbast" okText="Pronto!" cancelText="Cancelar" required>
-
+    <ion-select [(ngModel)]="selectVeiculoCadAbast"  okText="Pronto!" cancelText="Cancelar" required (ionChange)="atualizarDados()" >
+      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.indice}}">{{veiculo.modelo}} - {{veiculo.placa}}</ion-select-option>
     </ion-select>
   </ion-item>
 
-  <ion-radio-group>
-    <ion-label>Selecione o tipo de combustível abastecido</ion-label>
-    <ion-item>
-      <ion-label>Gasolina</ion-label>
-      <ion-radio slot="start" value="gasolina"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>Etanol</ion-label>
-      <ion-radio slot="start" value="etanol"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>Diesel</ion-label>
-      <ion-radio slot="start" value="diesel"></ion-radio>
-    </ion-item>
-  </ion-radio-group>
-
   <ion-item>
-    <ion-label position="floating">Ultimo Km:</ion-label>
-    <ion-input [(ngModel)]="inpUltimoKmCadAbast" [readonly]="true"></ion-input>
+    <ion-label position="floating">Selecione o tipo de combustível abastecido</ion-label>
+    <ion-select [(ngModel)]="selectCombAbastecido" okText="Pronto!" cancelText="Cancelar" required>
+      <ion-select-option value="Gasolina">Gasolina</ion-select-option>
+      <ion-select-option value="Etanol">Etanol</ion-select-option>
+      <ion-select-option value="Diesel">Diesel</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Km Atual:</ion-label>
-    <ion-input [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
+    <ion-checkbox [(ngModel)]="checkboxCombAditivado" slot="start" value="true"></ion-checkbox>
+    <ion-label>Aditivado</ion-label>
   </ion-item>
-  
+
+  <ion-item>
+    <ion-input [(ngModel)]="dataAbastecimento" type="date" ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-checkbox [(ngModel)]="checkboxTanqueCheio" slot="start" value="true"></ion-checkbox>
+    <ion-label>Tanque cheio</ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-item>
+      <ion-label position="floating">Ultimo Km:</ion-label>
+      <ion-input [(ngModel)]="inpUltimoKmCadAbast" disabled="true"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Km Atual:</ion-label>
+      <ion-input [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
+    </ion-item>
+  </ion-item>
+
+
   <ion-item>
     <ion-label position="floating">Quantidade Abastecida (Litros)</ion-label>
-    <ion-input [(ngModel)]="inpQtdAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
+    <ion-input [(ngModel)]="inpQdtAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -49,6 +59,6 @@
     <ion-input [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
   </ion-item>
 
-  <ion-button color="success" fill="outline" expand="block">cadastrar</ion-button>
+  <ion-button color="success" fill="outline" expand="block" (click)="cadastrarAbastecimento()">cadastrar</ion-button>
   <ion-button color="danger" fill="outline" expand="block" (click)="toHome()">cancelar</ion-button>
 </ion-content>
