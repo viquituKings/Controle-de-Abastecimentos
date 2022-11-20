@@ -1,6 +1,6 @@
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ToastController } from '@ionic/angular';
 import {collection, addDoc, getFirestore, getDocs} from 'firebase/firestore'
 
 @Component({
@@ -10,7 +10,10 @@ import {collection, addDoc, getFirestore, getDocs} from 'firebase/firestore'
 })
 export class VeiculosPage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, public navCtrl : NavController) { }
+  constructor(public menuCtrl : MenuController, 
+    public navCtrl : NavController,
+    public alertCtrl : AlertController,
+    public toastCtrl : ToastController) { }
 
   auth = getAuth()
   marcas                : any = []
@@ -31,8 +34,7 @@ export class VeiculosPage implements OnInit {
       if (usuario){
         this.userEmail = usuario.email
       }
-    })
-    
+    }) 
   }
 
   toHome(){
@@ -62,20 +64,49 @@ export class VeiculosPage implements OnInit {
   }
 
   async cadastrar(){
-    await addDoc (collection(getFirestore(),`users/${this.userEmail}/veiculos`), {
-      "tipoVeiculo" : this.radioTipoVeiculo,
-      "placa"       : this.inpPlaca1+this.inpPlaca2,
-      "ano"         : this.inpAnoVeiculo,
-      "marca"       : this.selectMarca,
-      "modelo"      : this.selectModelo,
-      "cilindrada"  : this.inpCilindradaVeiculo,
-      "kmAtual"     : this.inpKmAtual,
-      "ultimoKm"    : this.inpKmAtual
-    }).then(ok => {
-      console.log(`Veículo ${this.inpPlaca1}-${this.inpPlaca2} cadastrado`)
-      this.toHome()
-    }).catch(erro => {
-      console.log("erro")
-    })
+    if(this.inpPlaca1 == '' || 
+      this.inpPlaca2 == '' || 
+      this.radioTipoVeiculo == '' || 
+      this.selectMarca == '' || 
+      this.selectModelo == '' || 
+      this.inpCilindradaVeiculo == 0 || 
+      this.inpAnoVeiculo == 0 ){
+        this.alertCamposVazios()
+    }else{
+      await addDoc (collection(getFirestore(),`users/${this.userEmail}/veiculos`), {
+        "tipoVeiculo" : this.radioTipoVeiculo,
+        "placa"       : `${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()}`,
+        "ano"         : this.inpAnoVeiculo,
+        "marca"       : this.selectMarca,
+        "modelo"      : this.selectModelo,
+        "cilindrada"  : this.inpCilindradaVeiculo,
+        "kmAtual"     : this.inpKmAtual,
+        "ultimoKm"    : this.inpKmAtual
+      }).then(ok => {
+        this.toastCadastroOk()
+        this.toHome()
+      }).catch(erro => {
+        console.log("erro")
+      })
+    }
   }
+
+  async alertCamposVazios(){
+    const alert = await this.alertCtrl.create({
+      header: 'Ops...',
+      subHeader: 'Favor, preencha todos os campos antes de continuar.',
+      buttons:['Ok']
+    })
+    await alert.present()
+  }
+
+  async toastCadastroOk(){
+    const toast = await this.toastCtrl.create({
+      message: `Veículo ${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()} cadastrado com sucesso!`,
+      icon: 'checkmark-circle-outline',
+      duration: 1500
+    })
+    await toast.present()
+  }
+
 }
