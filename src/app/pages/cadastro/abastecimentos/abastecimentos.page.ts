@@ -1,6 +1,6 @@
 import { collection, getFirestore, getDocs, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,20 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AbastecimentosPage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, public navCtrl : NavController) { }
+  constructor(public menuCtrl : MenuController, 
+    public navCtrl : NavController,
+    public alertCtrl : AlertController,
+    public toastCtrl : ToastController) { }
 
   auth = getAuth()
   email : string
   veiculos : any[]
-  dataAbastecimento : string
-  selectVeiculoCadAbast : number
-  selectCombAbastecido : string
+  dataAbastecimento : string = ''
+  selectVeiculoCadAbast : number = null
+  selectCombAbastecido : string = ''
   checkboxTanqueCheio : boolean = false
   checkboxCombAditivado: boolean = false
-  inpUltimoKmCadAbast : number
-  inpKmAtualCadAbast : number
-  inpQdtAbastecidaCadAbast : number
-  inpValLitroCadAbast : number
+  inpUltimoKmCadAbast : number = null
+  inpKmAtualCadAbast : number = null
+  inpQdtAbastecidaCadAbast : number = null
+  inpValLitroCadAbast : number = null
 
   ngOnInit() {
     this.menuCtrl.enable(true)
@@ -57,23 +60,31 @@ export class AbastecimentosPage implements OnInit {
   }
 
   async cadastrarAbastecimento(){
-    await setDoc(doc(collection(getFirestore(), `users/${this.email}/medias`)),{
-      placa : this.veiculos[this.selectVeiculoCadAbast].placa,
-      kmAntigo : this.inpUltimoKmCadAbast,
-      kmAtual : this.inpKmAtualCadAbast,
-      qdtAbastecida : this.inpQdtAbastecidaCadAbast,
-      media : (this.inpKmAtualCadAbast + this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
-      valorLitro : this.inpValLitroCadAbast,
-      combustivel : this.selectCombAbastecido,
-      seTanqueCheio : this.checkboxTanqueCheio,
-      seAditivado : this.checkboxCombAditivado,
-      data : this.dataAbastecimento
-    }).then( sucesso => {
-      this.atualizarKmVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
-      console.log("abastecimento cadastrado");
-    }).catch(erro => {
-      console.log(erro);
-    })
+    if (this.dataAbastecimento == '' || 
+      this.selectVeiculoCadAbast == null || 
+      this.selectCombAbastecido  == '' || 
+      this.inpKmAtualCadAbast == 0 ){
+        this.alertCamposVazios()
+      }else{
+        await setDoc(doc(collection(getFirestore(), `users/${this.email}/medias`)),{
+          placa : this.veiculos[this.selectVeiculoCadAbast].placa,
+          kmAntigo : this.inpUltimoKmCadAbast,
+          kmAtual : this.inpKmAtualCadAbast,
+          qdtAbastecida : this.inpQdtAbastecidaCadAbast,
+          media : (this.inpKmAtualCadAbast + this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
+          valorLitro : this.inpValLitroCadAbast,
+          combustivel : this.selectCombAbastecido,
+          seTanqueCheio : this.checkboxTanqueCheio,
+          seAditivado : this.checkboxCombAditivado,
+          data : this.dataAbastecimento
+        }).then( sucesso => {
+          this.atualizarKmVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
+          this.toastCadastroOk()
+          this.toHome()
+        }).catch(erro => {
+          console.log(erro);
+        })
+      }
   }
 
   async atualizarKmVeiculo(veiculo : string){
@@ -81,6 +92,24 @@ export class AbastecimentosPage implements OnInit {
       ultimoKm : this.inpKmAtualCadAbast,
       kmAtual : this.inpKmAtualCadAbast,
     })
+  }
+
+  async alertCamposVazios(){
+    const alert = await this.alertCtrl.create({
+      header: 'Ops...',
+      subHeader: 'Favor, preencha todos os campos antes de continuar.',
+      buttons:['Ok']
+    })
+    await alert.present()
+  }
+
+  async toastCadastroOk(){
+    const toast = await this.toastCtrl.create({
+      message: 'Abastecimento cadastrado com sucesso!',
+      icon: 'checkmark-circle-outline',
+      duration: 1500
+    })
+    await toast.present()
   }
 
   toHome(){
