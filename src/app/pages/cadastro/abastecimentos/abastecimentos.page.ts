@@ -56,7 +56,7 @@ export class AbastecimentosPage implements OnInit {
 
   atualizarDados(){
     this.inpUltimoKmCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
-
+    this.inpKmAtualCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
   }
 
   async cadastrarAbastecimento(){
@@ -71,7 +71,7 @@ export class AbastecimentosPage implements OnInit {
           kmAntigo : this.inpUltimoKmCadAbast,
           kmAtual : this.inpKmAtualCadAbast,
           qdtAbastecida : this.inpQdtAbastecidaCadAbast,
-          media : (this.inpKmAtualCadAbast + this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
+          media : (this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
           valorLitro : this.inpValLitroCadAbast,
           combustivel : this.selectCombAbastecido,
           seTanqueCheio : this.checkboxTanqueCheio,

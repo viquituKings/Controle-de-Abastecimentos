@@ -1,6 +1,6 @@
 import { getDocs, collection, getFirestore, deleteDoc, doc } from 'firebase/firestore';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import { ActionSheetController, AlertController, MenuController, NavController } from '@ionic/angular';
+import { ActionSheetController, AlertController, MenuController, NavController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,7 +13,8 @@ export class VeiculosPage implements OnInit {
   constructor(public menuCtrl : MenuController, 
     public navCtrl : NavController, 
     public actionSheetCtrl : ActionSheetController, 
-    public alertCtrl : AlertController) { }
+    public alertCtrl : AlertController,
+    public toastCtrl : ToastController) { }
 
   auth = getAuth()
   userEmail : string
@@ -58,7 +59,7 @@ export class VeiculosPage implements OnInit {
   async deletarVeiculo(idVeiculo : string){
     await deleteDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), idVeiculo))
       .then(ok => {
-        console.log('veiculo deletado')
+        this.toastVeiculoExcluido()
         this.navCtrl.navigateRoot('home')
       }).catch( erro => {
         console.log(erro)
@@ -79,11 +80,22 @@ export class VeiculosPage implements OnInit {
         },
         {
           text: "Mais tarde.",
-          role: 'cancel'
+          handler: () => {
+            this.navCtrl.navigateForward("home")
+          }
         }
       ]
     })
     await actionSheet.present()
+  }
+
+  async toastVeiculoExcluido(){
+    const toast = await this.toastCtrl.create({
+      message: `Veículo excluído com sucesso!`,
+      duration: 1500
+    })
+    
+    await toast.present()
   }
 
   async alertConfExcluirVeiculo(veiculoId : string){

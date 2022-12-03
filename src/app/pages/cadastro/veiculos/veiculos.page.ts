@@ -21,8 +21,8 @@ export class VeiculosPage implements OnInit {
   inpPlaca1             : string = ""
   inpPlaca2             : string = ""
   radioTipoVeiculo      : string = ""
-  selectMarca           : string = ""
-  selectModelo          : string = ""
+  selectMarca           : number = null
+  selectModelo          : number = null
   inpAnoVeiculo         : number = 0
   inpCilindradaVeiculo  : number = 0
   inpKmAtual            : number = 0
@@ -47,7 +47,11 @@ export class VeiculosPage implements OnInit {
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/`))
     consulta.forEach(doc => {
-      this.marcas[i] = doc.data()
+      this.marcas[i] = {
+        id        : i,
+        valor     : doc.get('valor'),
+        nomeMarca : doc.get('nomeMarca')
+      }
       i++
     })
   }
@@ -55,20 +59,42 @@ export class VeiculosPage implements OnInit {
   async carregarModelos(){
     this.modelos = []
     var i = 0
-    const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/${this.selectMarca}/modelos`))
+    const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/${this.marcas[this.selectMarca].valor}/modelos`))
     consulta.forEach(doc => {
-      this.modelos[i] = doc.data()
+      if(this.radioTipoVeiculo == 'moto'){
+        this.modelos[i] = {
+          id          : i,
+          valor       : doc.get('valor'),
+          nomeModelo  : doc.get('nomeModelo'),
+          cilindrada  : doc.get('cilindrada')
+        }
+      }else{
+        this.modelos[i] = {
+          id          : i,
+          valor       : doc.get('valor'),
+          nomeModelo  : doc.get('nomeModelo')
+        }
+      }
       i++
     })
     console.log(this.modelos)
+  }
+
+  setCilindrada(){
+    if(this.radioTipoVeiculo == 'moto'){
+      var cilindrada = this.modelos[this.selectModelo].cilindrada;
+      this.inpCilindradaVeiculo = cilindrada
+    }else{
+      this.inpCilindradaVeiculo = 0
+    }
   }
 
   async cadastrar(){
     if(this.inpPlaca1 == '' || 
       this.inpPlaca2 == '' || 
       this.radioTipoVeiculo == '' || 
-      this.selectMarca == '' || 
-      this.selectModelo == '' || 
+      this.selectMarca == null || 
+      this.selectModelo == null || 
       this.inpCilindradaVeiculo == 0 || 
       this.inpAnoVeiculo == 0 ){
         this.alertCamposVazios()
@@ -77,8 +103,8 @@ export class VeiculosPage implements OnInit {
         "tipoVeiculo" : this.radioTipoVeiculo,
         "placa"       : `${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()}`,
         "ano"         : this.inpAnoVeiculo,
-        "marca"       : this.selectMarca,
-        "modelo"      : this.selectModelo,
+        "marca"       : this.marcas[this.selectMarca].nomeMarca,
+        "modelo"      : this.modelos[this.selectModelo].nomeModelo,
         "cilindrada"  : this.inpCilindradaVeiculo,
         "kmAtual"     : this.inpKmAtual,
         "ultimoKm"    : this.inpKmAtual

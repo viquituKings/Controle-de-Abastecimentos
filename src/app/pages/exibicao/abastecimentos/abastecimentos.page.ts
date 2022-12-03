@@ -1,6 +1,6 @@
 import { getDocs, collection, getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, ActionSheetController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,7 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AbastecimentosPage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, public navCtrl : NavController) { }
+  constructor(
+    public menuCtrl : MenuController, 
+    public navCtrl : NavController,
+    public actionSheetCtrl : ActionSheetController) { }
 
   auth = getAuth()
   email : string
@@ -31,17 +34,41 @@ export class AbastecimentosPage implements OnInit {
     var i = 0
     this.veiculos = []
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/veiculos`))
-    consulta.forEach( doc => {
-      this.veiculos[i] = {
-        id      : doc.id,
-        indice  : i,
-        placa   : doc.get('placa'),
-        modelo  : doc.get('modelo')
+    if(!consulta.empty){
+      consulta.forEach( doc => {
+        this.veiculos[i] = {
+          id      : doc.id,
+          indice  : i,
+          placa   : doc.get('placa'),
+          modelo  : doc.get('modelo')
+        }
+        console.log(this.veiculos[i])
+        i++
+      })
+      }else{
+        this.actionSheetSemVeiculos()
       }
-      console.log(this.veiculos[i])
-      i++
-    })
-  }
+    }
+
+    async actionSheetSemVeiculos(){
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Sem veículos...',
+        subHeader: 'Você não tem veículos cadastrados, deseja cadastrar agora?',
+        buttons: [{
+          text: 'Sim!',
+          handler: () => {
+            this.navCtrl.navigateForward('cadastro-veiculos');
+          }
+        },{
+          text: 'Mais tarde.',
+          handler: () => {
+            this.navCtrl.navigateForward('home')
+          }
+        }]
+      })
+
+      await actionSheet.present()
+    }
 
   async carregarMedias(){
     var i = 0
