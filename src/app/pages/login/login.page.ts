@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController, ToastController, AlertController } from '@ionic/angular';
+import { MenuController, NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
 
 
@@ -11,9 +11,10 @@ import { getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAnd
 export class LoginPage implements OnInit {
 
   constructor( public menuCtrl : MenuController, 
-    public navCtrl : NavController, 
+    public navCtrl   : NavController, 
     public toastCtrl : ToastController,
-    public alertCtrl : AlertController) { }
+    public alertCtrl : AlertController,
+    public loadCtrl  : LoadingController) { }
 
   auth = getAuth()
   inpEmailLogin : string = ""
@@ -21,11 +22,20 @@ export class LoginPage implements OnInit {
   inpRecSenha   : string = ""
 
   
-  ngOnInit() {
+  async ngOnInit() {
+    const load = await this.loadCtrl.create({
+      message : 'Tentando fazer login...'
+    })
+    load.present()
     this.menuCtrl.enable(false)
     onAuthStateChanged(this.auth, (user) => {
       if(user){
-        this.navCtrl.navigateForward("home")
+        load.dismiss()
+        this.toastLogOk()
+        this.toHome()
+      } else {
+        load.dismiss()
+        this.toastFalhaLogAuto()
       }
     })
   }
@@ -33,16 +43,24 @@ export class LoginPage implements OnInit {
   toCadastro(){
     this.navCtrl.navigateForward("cadastro-usuario")
   }
-  //efetuar login
-  logar(){
+  
+
+  async logar(){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando fazer login...'
+    })
     if(this.inpEmailLogin == "" || this.inpSenhaLogin == "" ){
       this.alertCamposVazios()
     }else{
+      load.present()
       signInWithEmailAndPassword(this.auth, this.inpEmailLogin, this.inpSenhaLogin)
       .then((usuario) => {
-        this.toHome();
+        load.dismiss()
+        this.toastLogOk()
+        this.toHome()
       })
       .catch((erro) => {
+        load.dismiss()
         console.log(erro)
         this.alertUsuarioOuSenhaIncorretos()
       })
@@ -50,6 +68,9 @@ export class LoginPage implements OnInit {
   }
 
   async alertRecuperarSenha(){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando enviar email...'
+    })
     const alert = await this.alertCtrl.create({
       header: 'Recuperação de senha',
       subHeader: 'Insira um email para enviar o link para recuperar sua senha',
@@ -61,11 +82,14 @@ export class LoginPage implements OnInit {
       buttons: [{
         text: 'Enviar',
         handler: (alertData)=>{
+          load.present()
           sendPasswordResetEmail(this.auth, alertData.inpRecSenha)
           .then(sucesso => {
+            load.dismiss()
             this.toastRecSenhaOk()
           }).catch(erro => {
-            
+            load.dismiss()
+            this.toastRecSenhaFalha()
           })
         }
       }]
@@ -91,11 +115,38 @@ export class LoginPage implements OnInit {
     await alert.present()
   }
 
+  async toastLogOk(){
+    const toast = await this.toastCtrl.create({
+      message : `usuário ${this.inpEmailLogin} logado!`,
+      icon : 'checkmark-circle-outline',
+      duration : 1500
+    })
+    toast.present()
+  }
+
+  async toastFalhaLogAuto(){
+    const toast = await this.toastCtrl.create({
+      message : 'Não foi possível logar automaticamente',
+      icon : 'close-circle-outline',
+      duration : 1500
+    })
+    toast.present()
+  }
+
   async toastRecSenhaOk(){
     const toast = await this.toastCtrl.create({
       message: 'Email de recuperação enviado!',
       duration: 1500,
       icon: 'checkmark-circle-outline',
+    })
+    await toast.present()
+  }
+
+  async toastRecSenhaFalha(){
+    const toast = await this.toastCtrl.create({
+      message : 'Não foi possível enviar o email',
+      duration : 1500,
+      icon : 'close-circle-outline'
     })
     await toast.present()
   }
