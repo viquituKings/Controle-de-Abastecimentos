@@ -1,6 +1,6 @@
 import { getDocs, collection, getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MenuController, NavController, ActionSheetController } from '@ionic/angular';
+import { MenuController, NavController, ActionSheetController, LoadingController, AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,7 +13,9 @@ export class AbastecimentosPage implements OnInit {
   constructor(
     public menuCtrl : MenuController, 
     public navCtrl : NavController,
-    public actionSheetCtrl : ActionSheetController) { }
+    public actionSheetCtrl : ActionSheetController,
+    public alertCtrl : AlertController,
+    public loadCtrl : LoadingController) { }
 
   auth = getAuth()
   email : string
@@ -31,6 +33,10 @@ export class AbastecimentosPage implements OnInit {
   }
 
   async carregarVeiculos(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando seus veículos...'
+    })
+    load.present()
     var i = 0
     this.veiculos = []
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/veiculos`))
@@ -45,7 +51,9 @@ export class AbastecimentosPage implements OnInit {
         console.log(this.veiculos[i])
         i++
       })
+      load.dismiss()
       }else{
+        load.dismiss()
         this.actionSheetSemVeiculos()
       }
     }
@@ -71,6 +79,10 @@ export class AbastecimentosPage implements OnInit {
     }
 
   async carregarMedias(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando abastecimentos...'
+    })
+    load.present()
     var i = 0
     this.medias = []
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/medias`))
@@ -81,6 +93,19 @@ export class AbastecimentosPage implements OnInit {
         i++
       }
     })
+    load.dismiss()
+    if (i == 0) {
+      this.alertSemAbastecimentos()
+    }
+  }
+
+  async alertSemAbastecimentos(){
+    const alert = await this.alertCtrl.create({
+      header : 'Ops...',
+      message : 'O Veículo selecionado não possui abastecimentos',
+      buttons : ['Ok']
+    })
+    alert.present()
   }
 
   toHome(){
