@@ -1,6 +1,6 @@
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController, AlertController, ToastController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import {collection, addDoc, getFirestore, getDocs} from 'firebase/firestore'
 
 @Component({
@@ -13,7 +13,8 @@ export class VeiculosPage implements OnInit {
   constructor(public menuCtrl : MenuController, 
     public navCtrl : NavController,
     public alertCtrl : AlertController,
-    public toastCtrl : ToastController) { }
+    public toastCtrl : ToastController,
+    public loadCtrl  : LoadingController) { }
 
   auth = getAuth()
   marcas                : any = []
@@ -43,6 +44,10 @@ export class VeiculosPage implements OnInit {
   }
 
   async carregarMarcas(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando marcas...'
+    })
+    load.present()
     this.marcas = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/`))
@@ -54,9 +59,14 @@ export class VeiculosPage implements OnInit {
       }
       i++
     })
+    load.dismiss()
   }
 
   async carregarModelos(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando modelos...'
+    })
+    load.present()
     this.modelos = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/${this.marcas[this.selectMarca].valor}/modelos`))
@@ -77,19 +87,27 @@ export class VeiculosPage implements OnInit {
       }
       i++
     })
-    console.log(this.modelos)
+    load.dismiss()
   }
 
-  setCilindrada(){
+  async setCilindrada(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando informações do veículo...'
+    })
     if(this.radioTipoVeiculo == 'moto'){
+      load.present()
       var cilindrada = this.modelos[this.selectModelo].cilindrada;
       this.inpCilindradaVeiculo = cilindrada
     }else{
       this.inpCilindradaVeiculo = 0
     }
+    load.dismiss()
   }
 
   async cadastrar(){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando cadastrar o veículo...'
+    })
     if(this.inpPlaca1 == '' || 
       this.inpPlaca2 == '' || 
       this.radioTipoVeiculo == '' || 
@@ -99,6 +117,7 @@ export class VeiculosPage implements OnInit {
       this.inpAnoVeiculo == 0 ){
         this.alertCamposVazios()
     }else{
+      load.present()
       await addDoc (collection(getFirestore(),`users/${this.userEmail}/veiculos`), {
         "tipoVeiculo" : this.radioTipoVeiculo,
         "placa"       : `${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()}`,
@@ -109,9 +128,11 @@ export class VeiculosPage implements OnInit {
         "kmAtual"     : this.inpKmAtual,
         "ultimoKm"    : this.inpKmAtual
       }).then(ok => {
+        load.dismiss()
         this.toastCadastroOk()
         this.toHome()
       }).catch(erro => {
+        load.dismiss()
         console.log("erro")
       })
     }

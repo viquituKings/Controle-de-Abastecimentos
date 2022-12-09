@@ -1,6 +1,6 @@
 import { getDocs, collection, getFirestore, deleteDoc, doc } from 'firebase/firestore';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import { ActionSheetController, AlertController, MenuController, NavController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, MenuController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -14,7 +14,8 @@ export class VeiculosPage implements OnInit {
     public navCtrl : NavController, 
     public actionSheetCtrl : ActionSheetController, 
     public alertCtrl : AlertController,
-    public toastCtrl : ToastController) { }
+    public toastCtrl : ToastController,
+    public loadCtrl : LoadingController) { }
 
   auth = getAuth()
   userEmail : string
@@ -31,11 +32,11 @@ export class VeiculosPage implements OnInit {
     
   }
 
-  toHome(){
-    this.navCtrl.navigateForward('home')
-  }
-
   async carregarVeiculos(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando seus veículos...'
+    })
+    load.present()
     this.veiculos = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `users/${this.userEmail}/veiculos`))
@@ -51,17 +52,25 @@ export class VeiculosPage implements OnInit {
           }
           i++
       })
+      load.dismiss()
     }else{
+      load.dismiss()
       this.actionSemVeiculos()
     }
   }
 
   async deletarVeiculo(idVeiculo : string){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando excluir o veículo...'
+    })
+    load.present()
     await deleteDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), idVeiculo))
       .then(ok => {
+        load.dismiss()
         this.toastVeiculoExcluido()
         this.navCtrl.navigateRoot('home')
       }).catch( erro => {
+        load.dismiss()
         console.log(erro)
       })
   }
@@ -116,6 +125,10 @@ export class VeiculosPage implements OnInit {
     ]
     })
     await alert.present()
+  }
+
+  toHome(){
+    this.navCtrl.navigateForward('home')
   }
 
 }

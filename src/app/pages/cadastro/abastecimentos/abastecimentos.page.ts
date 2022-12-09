@@ -1,6 +1,6 @@
 import { collection, getFirestore, getDocs, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MenuController, NavController, AlertController, ToastController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,7 +13,8 @@ export class AbastecimentosPage implements OnInit {
   constructor(public menuCtrl : MenuController, 
     public navCtrl : NavController,
     public alertCtrl : AlertController,
-    public toastCtrl : ToastController) { }
+    public toastCtrl : ToastController,
+    public loadCtrl  : LoadingController) { }
 
   auth = getAuth()
   email : string
@@ -38,6 +39,10 @@ export class AbastecimentosPage implements OnInit {
   }
 
   async carregarVeiculos(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando seus veículos...'
+    })
+    load.present()
     this.veiculos = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/veiculos`))
@@ -52,14 +57,24 @@ export class AbastecimentosPage implements OnInit {
       console.log(this.veiculos[i])
       i++
     })
+    load.dismiss()
   }
 
-  atualizarDados(){
+  async atualizarDados(){
+    const load = await this.loadCtrl.create({
+      message : 'Carregando informações do veículo...'
+    })
+    load.present()
     this.inpUltimoKmCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
     this.inpKmAtualCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
+    load.dismiss()
   }
 
   async cadastrarAbastecimento(){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando cadastrar o abastecimento'
+    })
+    load.present()
     if (this.dataAbastecimento == '' || 
       this.selectVeiculoCadAbast == null || 
       this.selectCombAbastecido  == '' || 
@@ -78,20 +93,27 @@ export class AbastecimentosPage implements OnInit {
           seAditivado : this.checkboxCombAditivado,
           data : this.dataAbastecimento
         }).then( sucesso => {
+          load.dismiss()
           this.atualizarKmVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
           this.toastCadastroOk()
           this.toHome()
         }).catch(erro => {
+          load.dismiss()
           console.log(erro);
         })
       }
   }
 
   async atualizarKmVeiculo(veiculo : string){
+    const load = await this.loadCtrl.create({
+      message : 'Atualizando informações do veículo...'
+    })
+    load.present()
     await updateDoc(doc(collection(getFirestore(), `users/${this.email}/veiculos/`), veiculo), {
       ultimoKm : this.inpKmAtualCadAbast,
       kmAtual : this.inpKmAtualCadAbast,
     })
+    load.dismiss()
   }
 
   async alertCamposVazios(){

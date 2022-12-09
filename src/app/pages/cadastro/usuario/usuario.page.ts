@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, getAuth, updateCurrentUser, updateProfile } from 'firebase/auth';
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController, AlertController, ToastController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-usuario',
@@ -12,7 +12,8 @@ export class UsuarioPage implements OnInit {
   constructor(public menuCtrl : MenuController, 
     public navCtrl : NavController,
     public alertCtrl : AlertController,
-    public toastCtrl : ToastController) { }
+    public toastCtrl : ToastController,
+    public loadCtrl : LoadingController) { }
 
   auth = getAuth()
   inpNomeCadastro : string = ""
@@ -24,19 +25,26 @@ export class UsuarioPage implements OnInit {
     this.menuCtrl.enable(false)
   }
 
-  cadastrar(){
+  async cadastrar(){
+    const load = await this.loadCtrl.create({
+      message : 'Tentando cadastrar usuário...'
+    })
     if (this.inpEmailCadastro == "" || this.inpSenhaCadastro == "" || this.inpConfSenhaCadastro == "" || this.inpNomeCadastro == ""){
       this.alertCamposVazios();
     }else if(this.inpSenhaCadastro == this.inpConfSenhaCadastro){
+      load.present()
       createUserWithEmailAndPassword(this.auth, this.inpEmailCadastro, this.inpSenhaCadastro)
       .then((usuario) => {
+        load.dismiss()
         this.atualizaNome()
         this.toastCadastroOk()
         this.toLogin()
       }).catch((erro) => {
+        load.dismiss()
         this.alertImpossivelCadastrar()
       })
     }else{
+      load.dismiss()
       this.alertSenhasDivergentes()
     }
 
@@ -78,11 +86,16 @@ export class UsuarioPage implements OnInit {
     await toast.present()
   }
 
-  atualizaNome(){
+  async atualizaNome(){
+    const load = await this.loadCtrl.create({
+      message : 'Atualizando dados...'
+    })
+    load.present()
     updateProfile(this.auth.currentUser, {
       displayName: this.inpNomeCadastro
     }).then(() => console.log("nome atualizado"))
       .catch(() => console.log("erro ao atualizar nome"))
+    load.dismiss()
   }
 
   toLogin(){
