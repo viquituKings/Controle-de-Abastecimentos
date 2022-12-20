@@ -8,10 +8,20 @@ import { MenuController, NavController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, public navCtrl : NavController) { }
+  constructor(
+    public menuCtrl : MenuController, 
+    public navCtrl : NavController) { }
 
   ngOnInit() {
     this.menuCtrl.enable(true)
+  }
+
+  toCadVeiculo(){
+    this.navCtrl.navigateForward('cadastro-veiculos');
+  }
+
+  toCadAbastecimento(){
+    this.navCtrl.navigateForward('cadastro-abastecimentos');
   }
 
 }
