@@ -1,4 +1,4 @@
-import { getDocs, collection, getFirestore, deleteDoc, doc } from 'firebase/firestore';
+import { getDocs, collection, getFirestore, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { ActionSheetController, AlertController, MenuController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
@@ -20,6 +20,7 @@ export class VeiculosPage implements OnInit {
   auth = getAuth()
   userEmail : string
   veiculos  : any[] = []
+  veiculoEditado : string
 
   ngOnInit() {
     this.menuCtrl.enable(true)
@@ -43,12 +44,14 @@ export class VeiculosPage implements OnInit {
     if(!consulta.empty){
       consulta.forEach( doc => {
           this.veiculos[i] = {
-            placa   : doc.get('placa'),
-            modelo  : doc.get('modelo'),
-            marca   : doc.get('marca'),
-            ano     : doc.get('ano'),
-            kmAtual : doc.get('kmAtual'),
-            id      : doc.id,
+            placa       : doc.get('placa'),
+            cilindrada  : doc.get('cilindrada'),
+            modelo      : doc.get('modelo'),
+            marca       : doc.get('marca'),
+            ano         : doc.get('ano'),
+            kmAtual     : doc.get('kmAtual'),
+            indice      : i,
+            id          : doc.id,
           }
           i++
       })
@@ -73,6 +76,67 @@ export class VeiculosPage implements OnInit {
         load.dismiss()
         console.log(erro)
       })
+  }
+
+  async editarVeiculo(indiceVeiculo : number){
+    var veiculo = this.veiculos[indiceVeiculo]
+    const toastEditado = await this.toastCtrl.create({
+      message : "Edição efetuada com sucesso!",
+      duration: 1500,
+      icon: 'checkmark-circle-outline',
+    })
+    const toastErro = await this.toastCtrl.create({
+      message : "Não foi possivel editar o veículo",
+      duration: 1500,
+      icon: 'close-circle-outline'
+    })
+    const load = await this.loadCtrl.create({
+      message : 'Tentando realizar edição...'
+    })
+    const alert = await this.alertCtrl.create({
+      header: `Editando ${veiculo.placa}`,
+      inputs:[
+        {
+          name: 'novoAnoVeiculo',
+          placeholder: 'Ano do veículo',
+          type: 'number',
+          min: 1900,
+          max: 2099
+        },
+        {
+          name: 'novaCilindradaVeiculo',
+          placeholder: 'Cilindrada do veículo',
+          type: 'number',
+          min: 50,
+        },
+      ],
+      buttons:[
+      {
+        text: 'Salvar',
+        handler: (alertData)=>{
+          load.present()
+          if(alertData.novoAnoVeiculo != "" && alertData.novaCilindradaVeiculo != ""){
+            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), veiculo.id),{
+              ano : alertData.novoAnoVeiculo,
+              cilindrada: alertData.novaCilindradaVeiculo
+            });
+            load.dismiss()
+            toastEditado.present()
+            this.toHome()
+          }else{
+            load.dismiss()
+            toastErro.present()
+          }
+          
+        }
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+      }
+      ]
+    })
+    alert.present()
   }
 
   async actionSemVeiculos(){
@@ -101,7 +165,8 @@ export class VeiculosPage implements OnInit {
   async toastVeiculoExcluido(){
     const toast = await this.toastCtrl.create({
       message: `Veículo excluído com sucesso!`,
-      duration: 1500
+      duration: 1500,
+      icon: 'checkmark-circle-outline',
     })
     
     await toast.present()

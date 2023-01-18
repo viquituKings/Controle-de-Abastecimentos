@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-menu-button slot="start"></ion-menu-button>
-    <ion-title>Seus Veículos</ion-title>
+    <ion-title>Meus Veículos</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -12,13 +12,14 @@
     </ion-card-header>
     <ion-card-content>
       <ion-label>Ano: {{veiculo.ano}} </ion-label>
-      <ion-label>Km Atual: {{veiculo.kmAtual}} <br></ion-label>
+      <ion-label>Km Atual: {{veiculo.kmAtual}} </ion-label>
+      <ion-label>Cilindrada: {{veiculo.cilindrada}} <br></ion-label>
       <ion-button color="danger" (click)="alertConfExcluirVeiculo(veiculo.id)">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
-      <!-- <ion-button>
+      <ion-button (click)="editarVeiculo(veiculo.indice)">
         <ion-icon name="create"></ion-icon>
-      </ion-button> -->
+      </ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

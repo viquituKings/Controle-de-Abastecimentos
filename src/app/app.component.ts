@@ -11,8 +11,8 @@ export class AppComponent {
     { title: 'Página Inicial', url: 'home', icon: 'home' },
     { title: 'Cadastrar Veículos', url: 'cadastro-veiculos', icon: 'add-circle'},
     { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill'},
-    { title: 'Seus Veículos', url: 'exibir-veiculos', icon: 'car'},
-    { title: 'Seus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud'},
+    { title: 'Meus Veículos', url: 'exibir-veiculos', icon: 'car'},
+    { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud'},
   ];
   constructor(public navCtrl : NavController) {}
 

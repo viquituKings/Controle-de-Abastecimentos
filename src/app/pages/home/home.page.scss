@@ -14,3 +14,13 @@ ion-fab-button[data-desc] {
     color: var(--color);
     box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
   }
+
+  ion-label h1 {
+    size: 10pt;
+    color: rgb(184, 184, 184);
+    background-color: rgb(56, 56, 56);
+    border-radius: 18px;
+    padding: 1%;
+    margin: 8% 4% 4% 4%;
+    text-align: center;
+  }

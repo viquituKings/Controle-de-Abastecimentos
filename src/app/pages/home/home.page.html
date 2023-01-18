@@ -5,8 +5,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ion-label>
+    <h1>O que deseja fazer hoje?</h1>
+  </ion-label>
+  <ion-button (click)="toCadVeiculo()" expand="block" shape="round" fill="clear" color="medium">Cadastrar veículo</ion-button>
+  <ion-button (click)="toCadAbastecimento()" expand="block" shape="round" fill="clear" color="medium">Cadastrar abastecimento</ion-button>
+  <ion-button (click)="toMeusVeiculos()" expand="block" shape="round" fill="clear" color="medium">Exibir meus veículos</ion-button>
+  <ion-button (click)="toMeusAbastecimentos()" expand="block" shape="round" fill="clear" color="medium">Exibir meus abastecimentos</ion-button>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button>
+    <ion-fab-button color="medium">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
