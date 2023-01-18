@@ -1,4 +1,4 @@
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { getAuth, signOut } from 'firebase/auth';
 import { Component } from '@angular/core';
 @Component({
@@ -14,7 +14,8 @@ export class AppComponent {
     { title: 'Meus Veículos', url: 'exibir-veiculos', icon: 'car'},
     { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud'},
   ];
-  constructor(public navCtrl : NavController) {}
+  constructor(public navCtrl : NavController,
+              public menuCtrl : MenuController) {}
 
   auth = getAuth()
 
@@ -29,5 +30,13 @@ export class AppComponent {
 
   toLogin(){
     this.navCtrl.navigateForward("login")
+    this.menuCtrl.close()
+    this.menuCtrl.enable(false)
+  }
+
+  toExibeUsuario(){
+    this.navCtrl.navigateForward("exibir-usuario");
+    this.menuCtrl.close()
+
   }
 }

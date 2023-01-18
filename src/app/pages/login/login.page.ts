@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
     load.present()
     this.menuCtrl.enable(false)
     onAuthStateChanged(this.auth, (user) => {
-      if(!user){
+      if(user){
         load.dismiss()
         this.toastLogOk()
         this.toHome()
@@ -55,6 +55,7 @@ export class LoginPage implements OnInit {
       load.present()
       signInWithEmailAndPassword(this.auth, this.inpEmailLogin, this.inpSenhaLogin)
       .then((usuario) => {
+        this.menuCtrl.enable(true)
         load.dismiss()
         this.toastLogOk()
         this.toHome()

@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Você</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item>
+    <img src="../../../../assets/avatar.svg" alt="avatar">
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Seu nome</ion-label>
+    <ion-input [(ngModel)]="nomeUsuario" autocomplete="name" inputmode="text" disabled></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Seu email</ion-label>
+    <ion-input [(ngModel)]="emailUsuario" autocomplete="email" inputmode="email" disabled></ion-input>
+  </ion-item>
+  <ion-button (click)="alertEdit()" fill="clear">
+    editar
+    <ion-icon slot="start" name="create"></ion-icon>
+  </ion-button>
+  <ion-button (click)="alertExcluir()" fill="clear" color="danger">
+    Excluir dados
+    <ion-icon slot="start" name="trash"></ion-icon>
+  </ion-button>
+</ion-content>
