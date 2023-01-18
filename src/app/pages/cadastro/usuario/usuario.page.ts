@@ -23,6 +23,28 @@ export class UsuarioPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(false)
+    this.alertLGPD()
+  }
+
+  async alertLGPD(){
+    const alert = await this.alertCtrl.create({
+      header : "Aviso sobre uso de dados!",
+      subHeader: "Dados necessários para cadastro e suas finalidades:",
+      message: `Email: Acesso ao aplicativo e identificação de dados de veículos no Banco de dados </br> Nome: Identificação do usuário no banco de dados </br> Aceite este termo para continuar a utilizar a aplicação.`,
+      buttons:[
+        {
+        text: "Aceito!",
+        role: 'cancel'
+        },
+        {
+          text: "Recuso!",
+          handler: ()=>{
+            this.toLogin()
+          }
+        }
+      ]
+    })
+    alert.present()
   }
 
   async cadastrar(){

@@ -31,11 +31,33 @@ export class VeiculosPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(true)
+    this.alertLGPD()
     onAuthStateChanged(this.auth, (usuario) => {
       if (usuario){
         this.userEmail = usuario.email
       }
     }) 
+  }
+
+  async alertLGPD(){
+    const alert = await this.alertCtrl.create({
+      header: 'Aviso sobre uso de dados sensíveis!',
+      subHeader: 'Dados necessários para cadastro do veículo e suas finalidades:',
+      message: `Placa: Identificação do veículo no banco de dados </br>Aceite este termo para prosseguir com o cadastro.`,
+      buttons: [
+        {
+          text: 'aceito!',
+          role: 'cancel'
+        },
+        {
+          text: 'Recuso!',
+          handler: ()=>{
+            this.toHome()
+          }
+        }
+      ]
+    })
+    alert.present()
   }
 
   toHome(){

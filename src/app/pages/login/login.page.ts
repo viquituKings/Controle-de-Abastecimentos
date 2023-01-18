@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
     load.present()
     this.menuCtrl.enable(false)
     onAuthStateChanged(this.auth, (user) => {
-      if(user){
+      if(!user){
         load.dismiss()
         this.toastLogOk()
         this.toHome()
