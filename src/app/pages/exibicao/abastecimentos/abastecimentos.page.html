@@ -7,8 +7,10 @@
 <ion-content>
   <ion-item>
     <ion-label position="floating">Selecione o veículo</ion-label>
-    <ion-select [(ngModel)]="selectVeiculoExibeAbast" okText="Pronto!" cancelText="Cancelar" (ionChange)="carregarMedias()">
-      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.placa}}">{{veiculo.modelo}} - {{veiculo.placa}}</ion-select-option>
+    <ion-select [(ngModel)]="selectVeiculoExibeAbast" okText="Pronto!" cancelText="Cancelar"
+      (ionChange)="carregarMedias()">
+      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.placa}}">{{veiculo.modelo}} -
+        {{veiculo.placa}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-card *ngFor="let media of medias">
@@ -16,20 +18,23 @@
       <ion-card-title>{{media.data}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-label> km Antígo: {{media.kmAntigo}} <br>
-                  km Abastecimento: {{media.kmAtual}} <br>
-                  Média de Km/lítro: {{media.media}} <br>
-                  Lítros abastecidos: {{media.qdtAbastecida}} L <br>
-                  Valor do lítro: R$ {{media.valorLitro}} <br>
-      </ion-label>
+      <ion-label>
+        Combustível abastecido: {{media.combustivel}} <br>
         <ion-item>
           <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
           <ion-label>Combustível aditivado</ion-label>
         </ion-item>
+        km Antígo: {{media.kmAntigo}} <br>
+        km Abastecimento: {{media.kmAtual}} <br>
+        Média de Km/lítro: {{media.media.toFixed(2)}} <br>
+        Valor do lítro: R$ {{media.valorLitro}} <br>
+        Lítros abastecidos: {{media.qdtAbastecida}} L <br>
         <ion-item>
           <ion-checkbox disabled="true" checked="{{media.seTanqueCheio}}"></ion-checkbox>
           <ion-label>Tanque Cheio</ion-label>
-        </ion-item>
+        </ion-item> <br>
+        Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}}
+      </ion-label>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -11,17 +11,17 @@ import { Component, OnInit } from '@angular/core';
 export class AbastecimentosPage implements OnInit {
 
   constructor(
-    public menuCtrl : MenuController, 
-    public navCtrl : NavController,
-    public actionSheetCtrl : ActionSheetController,
-    public alertCtrl : AlertController,
-    public loadCtrl : LoadingController) { }
+    public menuCtrl: MenuController,
+    public navCtrl: NavController,
+    public actionSheetCtrl: ActionSheetController,
+    public alertCtrl: AlertController,
+    public loadCtrl: LoadingController) { }
 
   auth = getAuth()
-  email : string
-  veiculos : any[]
-  medias : any[] = []
-  selectVeiculoExibeAbast : string
+  email: string
+  veiculos: any[]
+  medias: any[] = []
+  selectVeiculoExibeAbast: string
 
 
   ngOnInit() {
@@ -32,83 +32,101 @@ export class AbastecimentosPage implements OnInit {
     })
   }
 
-  async carregarVeiculos(){
+  async carregarVeiculos() {
     const load = await this.loadCtrl.create({
-      message : 'Carregando seus veículos...'
+      message: 'Carregando seus veículos...'
     })
     load.present()
     var i = 0
     this.veiculos = []
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/veiculos`))
-    if(!consulta.empty){
-      consulta.forEach( doc => {
+    if (!consulta.empty) {
+      consulta.forEach(doc => {
         this.veiculos[i] = {
-          id      : doc.id,
-          indice  : i,
-          placa   : doc.get('placa'),
-          modelo  : doc.get('modelo')
+          id: doc.id,
+          indice: i,
+          placa: doc.get('placa'),
+          modelo: doc.get('modelo')
         }
         console.log(this.veiculos[i])
         i++
       })
       load.dismiss()
-      }else{
-        load.dismiss()
-        this.actionSheetSemVeiculos()
-      }
+    } else {
+      load.dismiss()
+      this.actionSheetSemVeiculos()
     }
+  }
 
-    async actionSheetSemVeiculos(){
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: 'Sem veículos...',
-        subHeader: 'Você não tem veículos cadastrados, deseja cadastrar agora?',
-        buttons: [{
-          text: 'Sim!',
-          handler: () => {
-            this.navCtrl.navigateForward('cadastro-veiculos');
-          }
-        },{
-          text: 'Mais tarde.',
-          handler: () => {
-            this.navCtrl.navigateForward('home')
-          }
-        }]
-      })
+  async actionSheetSemVeiculos() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Sem veículos...',
+      subHeader: 'Você não tem veículos cadastrados, deseja cadastrar agora?',
+      buttons: [{
+        text: 'Sim!',
+        handler: () => {
+          this.navCtrl.navigateForward('cadastro-veiculos');
+        }
+      }, {
+        text: 'Mais tarde.',
+        handler: () => {
+          this.navCtrl.navigateForward('home')
+        }
+      }]
+    })
 
-      await actionSheet.present()
-    }
+    await actionSheet.present()
+  }
 
-  async carregarMedias(){
+  async carregarMedias() {
     const load = await this.loadCtrl.create({
-      message : 'Carregando abastecimentos...'
+      message: 'Carregando abastecimentos...'
     })
     load.present()
     var i = 0
+    var j = 0
+    var control = 1
+    var desordenado = []
+    var ordenador
     this.medias = []
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/medias`))
-    consulta.forEach( doc => {
-      if (doc.get('placa') == this.selectVeiculoExibeAbast){
-        this.medias[i] = doc.data()
-        console.log(this.medias[i])
+    consulta.forEach(doc => {
+      if (doc.get('placa') == this.selectVeiculoExibeAbast) {
+        desordenado[i] = doc.data()
+        console.log(desordenado[i])
         i++
       }
     })
+    while (control != 0) {
+      control = 0;
+      for (j = 0; j < desordenado.length; j++) {
+        if (desordenado[j + 1] != null) {
+          if (desordenado[j].data < desordenado[j + 1].data) {
+            ordenador = desordenado[j + 1];
+            desordenado[j + 1] = desordenado[j];
+            desordenado[j] = ordenador;
+            control++;
+          }
+        }
+      }
+    }
+    this.medias = desordenado
     load.dismiss()
     if (i == 0) {
       this.alertSemAbastecimentos()
     }
   }
 
-  async alertSemAbastecimentos(){
+  async alertSemAbastecimentos() {
     const alert = await this.alertCtrl.create({
-      header : 'Ops...',
-      message : 'O Veículo selecionado não possui abastecimentos',
-      buttons : ['Ok']
+      header: 'Ops...',
+      message: 'O Veículo selecionado não possui abastecimentos',
+      buttons: ['Ok']
     })
     alert.present()
   }
 
-  toHome(){
+  toHome() {
     this.navCtrl.navigateForward('home')
   }
 }
