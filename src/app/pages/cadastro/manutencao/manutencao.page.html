@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Cadastro - Ciclo de manutenção</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item>
+    <ion-label position="floating">Selecione o veículo</ion-label>
+    <ion-select [(ngModel)]="selectVeiculo" okText="Pronto!" cancelText="Cancelar" required="true" >
+      <ion-select-option  *ngFor="let veiculo of veiculos"  value="{{veiculo.id}}">{{veiculo.modelo}} - {{veiculo.placa}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <p>Insira a periodicidade das seguintes manutenções:</p>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Revisão (km)</ion-label>
+    <ion-input [(ngModel)]="revKms" type="number"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Revisão (Meses)</ion-label>
+    <ion-input [(ngModel)]="revMeses" type="number"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Troca de óleo (km)</ion-label>
+    <ion-input [(ngModel)]="oleoKms" type="number"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Troca de óleo (Meses)</ion-label>
+    <ion-input [(ngModel)]="oleoMeses" type="number"></ion-input>
+  </ion-item>
+  <ion-button fill="outline" expand="block" color="success" (click)="cadManutencao()">
+    Cadastrar manutenção
+  </ion-button>
+  <ion-button fill="outline" expand="block" color="danger">
+    cancelar
+  </ion-button>
+
+</ion-content>

@@ -38,7 +38,12 @@ const routes: Routes = [
   {
     path: 'exibir-usuario',
     loadChildren: () => import('./pages/exibicao/usuario/usuario.module').then( m => m.UsuarioPageModule)
+  },
+  {
+    path: 'cadastro-manutencao-periodica',
+    loadChildren: () => import('./pages/cadastro/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
   }
+
 
 ];
 
