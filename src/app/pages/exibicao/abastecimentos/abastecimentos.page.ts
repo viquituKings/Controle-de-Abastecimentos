@@ -21,6 +21,9 @@ export class AbastecimentosPage implements OnInit {
   email: string
   veiculos: any[]
   medias: any[] = []
+  valorTotal : number = 0
+  quantidadeTotal : number = 0
+  mediaTotal : number = 0
   selectVeiculoExibeAbast: string
 
 
@@ -111,6 +114,16 @@ export class AbastecimentosPage implements OnInit {
       }
     }
     this.medias = desordenado
+    this.mediaTotal = 0
+    this.valorTotal = 0
+    this.quantidadeTotal = 0
+    this.medias.forEach(media => {
+      this.valorTotal += (media.valorLitro * media.qdtAbastecida)
+      this.quantidadeTotal += media.qdtAbastecida
+      this.mediaTotal += media.media
+      control++
+    })
+    this.mediaTotal = (this.mediaTotal/control)
     load.dismiss()
     if (i == 0) {
       this.alertSemAbastecimentos()
