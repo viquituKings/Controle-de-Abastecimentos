@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, getDocs, getFirestore, updateDoc } from 'firebase/firestore';
+import { collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-manutencao',
@@ -14,28 +15,33 @@ export class ManutencaoPage implements OnInit {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public loadCtrl: LoadingController,
-    public navCtrl: NavController
-  ) { }
+    public navCtrl: NavController,
+    public routeCtrl: Router
+  ) {
+    const nav = routeCtrl.getCurrentNavigation()
+    this.selectVeiculo = nav.extras.state.idVeiculo
+  }
 
   auth = getAuth()
   userEmail = ''
-  veiculos: any
   selectVeiculo: string
   revKms: number
   revMeses: number
   oleoKms: number
   oleoMeses: number
+  ultimaRevKm: number
+  ultimaTrocaOleoKm: number
 
   ngOnInit() {
     onAuthStateChanged(this.auth, user => {
       if (user) {
         this.userEmail = user.email
-        this.carregarVeiculos()
+        console.log(this.userEmail)
       }
     })
   }
 
-  async toastCadOk(){
+  async toastCadOk() {
     const toast = await this.toastCtrl.create({
       message: "Informações cadastradas com sucesso!",
       duration: 1500,
@@ -44,7 +50,7 @@ export class ManutencaoPage implements OnInit {
     toast.present()
   }
 
-  async toastCadFail(){
+  async toastCadFail() {
     const toast = await this.toastCtrl.create({
       message: "Alguma coisa esta errada!",
       duration: 1500,
@@ -53,49 +59,51 @@ export class ManutencaoPage implements OnInit {
     toast.present()
   }
 
-  async carregarVeiculos() {
-    const load = await this.loadCtrl.create({
-      message: 'Carregando seus veículos...'
-    })
-    load.present()
-    this.veiculos = []
-    var i = 0
-    const consulta = await getDocs(collection(getFirestore(), `users/${this.userEmail}/veiculos`))
-    if (!consulta.empty) {
-      consulta.forEach(doc => {
-        this.veiculos[i] = doc.data()
-        this.veiculos[i].id = doc.id
-        console.log(this.veiculos[i])
-        i++
+  calcularProxRev(){
+    var cont = false
+    var proxRev = this.ultimaRevKm
+
+    while (cont === false){
+      if(this.ultimaRevKm >= this.revKms){
+        proxRev += this.revKms
+        if(proxRev > this.ultimaRevKm){
+          cont = true
         }
-      )
+      }else if (this.ultimaRevKm < this.revKms){
+        proxRev = this.revKms
+        cont = true
+      }
     }
-    load.dismiss()
+
+    return proxRev
   }
 
-  async cadManutencao(){
+  async cadManutencao() {
+    console.log(this.selectVeiculo)
     const load = await this.loadCtrl.create({
       message: "cadastrando informações..."
     })
     load.present()
-    await updateDoc(doc(collection(getFirestore(),`users/${this.userEmail}/veiculos`),this.selectVeiculo), {
+    await updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.selectVeiculo), {
       revisaoKm: this.revKms,
       revisaoMes: this.revMeses,
       trocaOleoKm: this.oleoKms,
       trocaOleoMeses: this.oleoMeses,
+      ultimaRevisaoKm: this.ultimaRevKm,
+      ultimaTrocaOleoKm: this.ultimaTrocaOleoKm,
+      proxRevKm: this.calcularProxRev(),
+      proxTrocaOleoKm: (this.ultimaTrocaOleoKm + this.oleoKms),
       cadManPeriodica: true
     }).then(() => {
       this.toastCadOk()
-      this.toHome()
+      this.routeCtrl.navigateByUrl('/exibir-manutencao-periodica', {
+        state: { idVeiculo: this.selectVeiculo }
+      })
       load.dismiss()
     }).catch(() => {
       this.toastCadFail()
       load.dismiss()
     })
-  }
-
-  toHome(){
-    this.navCtrl.navigateForward('home')
   }
 
 }

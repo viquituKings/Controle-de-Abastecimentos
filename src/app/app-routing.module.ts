@@ -42,7 +42,12 @@ const routes: Routes = [
   {
     path: 'cadastro-manutencao-periodica',
     loadChildren: () => import('./pages/cadastro/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
+  },
+  {
+    path: 'exibir-manutencao-periodica',
+    loadChildren: () => import('./pages/exibicao/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
   }
+
 
 
 ];

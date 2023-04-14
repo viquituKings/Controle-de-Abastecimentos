@@ -2,6 +2,7 @@ import { getDocs, collection, getFirestore, deleteDoc, doc, updateDoc } from 'fi
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { ActionSheetController, AlertController, MenuController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-veiculos',
@@ -15,7 +16,8 @@ export class VeiculosPage implements OnInit {
     public actionSheetCtrl : ActionSheetController, 
     public alertCtrl : AlertController,
     public toastCtrl : ToastController,
-    public loadCtrl : LoadingController) { }
+    public loadCtrl : LoadingController,
+    public routerCtrl : Router) { }
 
   auth = getAuth()
   userEmail : string
@@ -194,6 +196,12 @@ export class VeiculosPage implements OnInit {
 
   toHome(){
     this.navCtrl.navigateForward('home')
+  }
+
+  toManutencao(veiculo : string){
+    this.routerCtrl.navigateByUrl('/exibir-manutencao-periodica', {
+      state: {idVeiculo : veiculo}
+    })
   }
 
 }

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>Manutenção Periódica</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item>
+    <ion-label>{{modPlaca}}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Última revisão (km):</ion-label>
+    <ion-input [(ngModel)]="ultimaRevKm" disabled></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Próxima revisão (km):</ion-label>
+    <ion-input [(ngModel)]="proxRevKm" disabled></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Última troca de óleo (km):</ion-label>
+    <ion-input [(ngModel)]="ultimaTrocaOleoKm" disabled></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Próxima troca de óleo (km):</ion-label>
+    <ion-input [(ngModel)]="proxTrocaOleoKm" disabled></ion-input>
+  </ion-item>
+  <ion-button expand="block" fill="outline" (click)="cadRevisao()" >cadastrar revisão</ion-button>
+  <ion-button expand="block" fill="outline" (click)="cadTrocaOleo()">cadastrar troca de óleo</ion-button>
+  <ion-button expand="block" fill="outline" (click)="toCadManutencao()">cad</ion-button>
+</ion-content>
