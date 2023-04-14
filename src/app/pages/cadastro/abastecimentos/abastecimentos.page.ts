@@ -47,13 +47,9 @@ export class AbastecimentosPage implements OnInit {
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `users/${this.email}/veiculos`))
     consulta.forEach( doc => {
-      this.veiculos[i] = {
-        indice    : i,
-        id        : doc.id,
-        placa     : doc.get('placa'),
-        modelo    : doc.get('modelo'),
-        ultimoKm  : doc.get('kmAtual'),
-      }
+      this.veiculos[i] = doc.data()
+      this.veiculos[i].indice = i
+      this.veiculos[i].id = doc.id
       console.log(this.veiculos[i])
       i++
     })
@@ -65,9 +61,30 @@ export class AbastecimentosPage implements OnInit {
       message : 'Carregando informações do veículo...'
     })
     load.present()
-    this.inpUltimoKmCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
-    this.inpKmAtualCadAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoKm
+    this.inpUltimoKmCadAbast = this.veiculos[this.selectVeiculoCadAbast].kmAtual
+    this.inpKmAtualCadAbast = this.veiculos[this.selectVeiculoCadAbast].kmAtual
     load.dismiss()
+  }
+
+  async verificarManPeriodica(){
+    if(this.veiculos[this.selectVeiculoCadAbast].cadManPeriodica != null && this.veiculos[this.selectVeiculoCadAbast].cadManPeriodica != false){
+      if((this.inpKmAtualCadAbast + 1000) >= this.veiculos[this.selectVeiculoCadAbast].proxRevKm){
+        const alert = await this.alertCtrl.create({
+          header: 'Atenção!!!',
+          subHeader: `Seu veículo ${this.veiculos[this.selectVeiculoCadAbast].placa} está próximo do período de revisão!`,
+          buttons: ['ok']
+        })
+        alert.present()
+      }
+      if((this.inpKmAtualCadAbast + 500) >= this.veiculos[this.selectVeiculoCadAbast].proxTrocaOleoKm){
+        const alert = await this.alertCtrl.create({
+          header: 'Atenção!!!',
+          subHeader: `Seu veículo ${this.veiculos[this.selectVeiculoCadAbast].placa} está próximo do período de troca de óleo!`,
+          buttons: ['ok']
+        })
+        alert.present()
+      }
+    }
   }
 
   async cadastrarAbastecimento(){
@@ -95,6 +112,7 @@ export class AbastecimentosPage implements OnInit {
         }).then( sucesso => {
           load.dismiss()
           this.atualizarKmVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
+          this.verificarManPeriodica()
           this.toastCadastroOk()
           this.toHome()
         }).catch(erro => {
