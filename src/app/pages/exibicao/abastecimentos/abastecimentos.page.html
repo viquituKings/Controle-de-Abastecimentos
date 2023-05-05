@@ -20,28 +20,31 @@
       <p>Média de rendimento geral: {{mediaTotal.toFixed(2)}} km/l </p>
     </ion-label>
   </ion-item>
-  <ion-card *ngFor="let media of medias">
-    <ion-card-header>
-      <ion-card-title>{{media.data}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-label>
-        Combustível abastecido: {{media.combustivel}} <br>
-        <ion-item>
-          <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
-          <ion-label>Combustível aditivado</ion-label>
-        </ion-item>
-        km Antígo: {{media.kmAntigo}} <br>
-        km Abastecimento: {{media.kmAtual}} <br>
-        Média de Km/lítro: {{media.media.toFixed(2)}} <br>
-        Valor do lítro: R$ {{media.valorLitro}} <br>
-        Lítros abastecidos: {{media.qdtAbastecida}} L <br>
-        <ion-item>
-          <ion-checkbox disabled="true" checked="{{media.seTanqueCheio}}"></ion-checkbox>
-          <ion-label>Tanque Cheio</ion-label>
-        </ion-item> <br>
-        Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}}
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let media of medias">
+      <ion-item slot="header">
+        <ion-label>{{media.data}}</ion-label>
+      </ion-item>
+      <ion-item slot="content">
+        <ion-label>
+          Combustível abastecido: {{media.combustivel}} <br>
+          <ion-item>
+            <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
+            <ion-label>Combustível aditivado</ion-label>
+          </ion-item>
+          km Antígo: {{media.kmAntigo}} Km<br>
+          km Abastecimento: {{media.kmAtual}} Km<br>
+          Média de Km/lítro: {{media.media.toFixed(2)}} Km/l<br>
+          Valor do lítro: R$ {{media.valorLitro}} <br>
+          Lítros abastecidos: {{media.qdtAbastecida}} L <br>
+          <ion-item>
+            <ion-checkbox disabled="true" checked="{{media.seTanqueCheio}}"></ion-checkbox>
+            <ion-label>Tanque Cheio</ion-label>
+          </ion-item> <br>
+          Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}} <br>
+          Custo por Km: R$ {{((media.valorLitro * media.qdtAbastecida)/(media.kmAtual-media.kmAntigo)).toFixed(2)}}
+        </ion-label>
+      </ion-item>
+    </ion-accordion>
+  </ion-accordion-group>
 </ion-content>

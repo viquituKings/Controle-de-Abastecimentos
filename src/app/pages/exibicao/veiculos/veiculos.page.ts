@@ -204,4 +204,10 @@ export class VeiculosPage implements OnInit {
     })
   }
 
+  toInfoVeiculo(veiculo : string){
+    this.routerCtrl.navigateByUrl('/info-veiculo', {
+      state: {idVeiculo : veiculo}
+    })
+  }
+
 }

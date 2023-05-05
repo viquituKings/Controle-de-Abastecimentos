@@ -46,7 +46,11 @@ const routes: Routes = [
   {
     path: 'exibir-manutencao-periodica',
     loadChildren: () => import('./pages/exibicao/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
+  },  {
+    path: 'info-veiculo',
+    loadChildren: () => import('./pages/exibicao/info-veiculo/info-veiculo.module').then( m => m.InfoVeiculoPageModule)
   }
+
 
 
 
