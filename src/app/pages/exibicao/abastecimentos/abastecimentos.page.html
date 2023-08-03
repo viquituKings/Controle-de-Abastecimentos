@@ -23,10 +23,16 @@
   <ion-accordion-group>
     <ion-accordion *ngFor="let media of medias">
       <ion-item slot="header">
-        <ion-label>{{media.data}}</ion-label>
+        <ion-label>
+          {{media.data}}
+        </ion-label>
       </ion-item>
       <ion-item slot="content">
         <ion-label>
+          <!-- <ion-button color="danger" (click)="alertDeleteMedia(media.id)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button> -->
+          <br>
           Combustível abastecido: {{media.combustivel}} <br>
           <ion-item>
             <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
@@ -43,6 +49,7 @@
           </ion-item> <br>
           Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}} <br>
           Custo por Km: R$ {{((media.valorLitro * media.qdtAbastecida)/(media.kmAtual-media.kmAntigo)).toFixed(2)}}
+          
         </ion-label>
       </ion-item>
     </ion-accordion>

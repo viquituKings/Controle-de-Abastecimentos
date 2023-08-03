@@ -1,6 +1,6 @@
-import { getDocs, collection, getFirestore } from 'firebase/firestore';
+import { getDocs, collection, getFirestore, deleteDoc, doc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { MenuController, NavController, ActionSheetController, LoadingController, AlertController } from '@ionic/angular';
+import { MenuController, NavController, ActionSheetController, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -15,7 +15,8 @@ export class AbastecimentosPage implements OnInit {
     public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
-    public loadCtrl: LoadingController) { }
+    public loadCtrl: LoadingController,
+    public toastCtrl : ToastController) { }
 
   auth = getAuth()
   email: string
@@ -96,6 +97,7 @@ export class AbastecimentosPage implements OnInit {
     consulta.forEach(doc => {
       if (doc.get('placa') == this.selectVeiculoExibeAbast) {
         desordenado[i] = doc.data()
+        desordenado[i].id = doc.id
         console.log(desordenado[i])
         i++
       }
@@ -128,6 +130,53 @@ export class AbastecimentosPage implements OnInit {
     if (i == 0) {
       this.alertSemAbastecimentos()
     }
+  }
+
+  async alertDeleteMedia(abastecimento : string){
+    const load = await this.loadCtrl.create({
+      message:'Tentando excluir média...'
+    })
+    const alert = await this.alertCtrl.create({
+      header: 'Tem certeza disso?',
+      message: 'Esta ação não pode ser desfeita',
+      buttons: [{
+        text: 'Sim!',
+        handler: () => {
+          load.present();
+          deleteDoc(doc(collection(getFirestore(), `users/${this.email}/medias`), abastecimento))
+            .then(ok => {
+              this.toastDeleteOk()
+              this.toHome()
+              load.dismiss()
+            })
+            .catch(error => {
+              this.toastDeleteFail()
+              load.dismiss()
+            })
+        }
+      },
+      {
+        text: 'Não!',
+        role: 'cancel'
+      }]
+    })
+    await alert.present()
+  }
+
+  async toastDeleteOk(){
+    const toast = await this.toastCtrl.create({
+      message: 'Abastecimento excluido!',
+      duration: 2000
+    })
+    await toast.present()
+  }
+
+  async toastDeleteFail(){
+    const toast = await this.toastCtrl.create({
+      message: 'Algo deu errado!',
+      duration: 2000
+    })
+    await toast.present()
   }
 
   async alertSemAbastecimentos() {
