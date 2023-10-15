@@ -95,7 +95,9 @@ export class AbastecimentosPage implements OnInit {
     if (this.dataAbastecimento == '' || 
       this.selectVeiculoCadAbast == null || 
       this.selectCombAbastecido  == '' || 
-      this.inpKmAtualCadAbast == 0 ){
+      this.inpKmAtualCadAbast == 0 || 
+      this.inpKmAtualCadAbast == this.veiculos[this.selectVeiculoCadAbast].kmAtual){
+        load.dismiss()
         this.alertCamposVazios()
       }else{
         await setDoc(doc(collection(getFirestore(), `users/${this.email}/medias`)),{
