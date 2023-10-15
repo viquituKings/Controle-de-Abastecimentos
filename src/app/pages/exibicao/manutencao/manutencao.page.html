@@ -24,6 +24,15 @@
     <ion-label position="floating">Próxima troca de óleo (km):</ion-label>
     <ion-input [(ngModel)]="proxTrocaOleoKm" disabled></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="floating">Manutenção freio dianteiro (km):</ion-label>
+    <ion-input [(ngModel)]="manFreioDiant" disabled></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Manutenção freio traseiro (km):</ion-label>
+    <ion-input [(ngModel)]="manFreioTras" disabled></ion-input>
+  </ion-item>
   <ion-button expand="block" fill="outline" (click)="cadRevisao()" >cadastrar revisão</ion-button>
   <ion-button expand="block" fill="outline" (click)="cadTrocaOleo()">cadastrar troca de óleo</ion-button>
+  <ion-button expand="block" fill="outline" (click)="cadLadoManFreios()">cadastrar manutenção dos freios</ion-button>
 </ion-content>

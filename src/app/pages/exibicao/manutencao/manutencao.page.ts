@@ -29,6 +29,8 @@ export class ManutencaoPage implements OnInit {
   proxRevKm: number
   ultimaTrocaOleoKm: number
   proxTrocaOleoKm: number
+  manFreioDiant: number
+  manFreioTras: number
 
   ngOnInit() {
     onAuthStateChanged(this.auth, user => {
@@ -51,6 +53,8 @@ export class ManutencaoPage implements OnInit {
         this.proxRevKm = veiculo.get('proxRevKm')
         this.ultimaTrocaOleoKm = veiculo.get('ultimaTrocaOleoKm')
         this.proxTrocaOleoKm = veiculo.get('proxTrocaOleoKm')
+        this.manFreioDiant = veiculo.get('manFreioDiant')
+        this.manFreioTras = veiculo.get('manFreioTras')
         load.dismiss()
       }else{
         load.dismiss()
@@ -201,6 +205,96 @@ export class ManutencaoPage implements OnInit {
       ]
     })
     await alert.present()
+  }
+
+  async cadLadoManFreios(){
+    const alert1 = await this.alertCtrl.create({
+      header: "Manutenção nos freios",
+      subHeader: "Selecione o freio:",
+      inputs: [
+        {
+          name: "dianteiro",
+          type: "radio",
+          label: "Dianteiro",
+          value: 1
+        },
+        {
+          name: "traseiro",
+          type: "radio",
+          label: "Traseiro",
+          value: 2
+        },
+      ],
+      buttons: [
+        {
+          text: "Confirmar",
+          handler: (alertData) => {
+            this.cadManFreios(alertData)
+          }
+        },
+        {
+          text: "Cancelar",
+        }
+      ]
+    }) 
+    alert1.present()
+  }
+
+  async cadManFreios(ladoFreios: number){
+    var freio : string
+    if(ladoFreios == 1){
+      freio = "Dianteiros"
+    }else if (ladoFreios == 2){
+      freio = "Traseiros"
+    }
+    const load = await this.loadCtrl.create({
+      message: "Tentando cadastrar..."
+    })
+    const alert = await this.alertCtrl.create({
+      header: "Manutenção nos freios",
+      message:"Freios " + freio,
+      subHeader: "Insira o Km da manutenção realizada:",
+      inputs: [{
+        name: "kmManFreio",
+        type: "number",
+        id: "kmManFreio",
+        placeholder: "Km Manutenção"
+      }],
+      buttons: [{
+        text: "Confirmar",
+        handler: (alertData) => {
+          load.present()
+          if(freio == "Dianteiros"){
+            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+              manFreioDiant: Number(alertData.kmManFreio)
+          }).then(() => {
+            this.toastCadOk()
+            load.dismiss()
+            this.navCtrl.navigateBack('exibir-veiculos')
+          }).catch(() => {
+            load.dismiss()
+            this.toastCadErro()
+          })
+        }else if(freio == "Traseiros"){
+          updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+            manFreioTras: Number(alertData.kmManFreio)
+          }).then(() => {
+            this.toastCadOk()
+            load.dismiss()
+            this.navCtrl.navigateBack('exibir-veiculos')
+          }).catch(() => {
+            load.dismiss()
+            this.toastCadErro()
+          })
+        }
+        }
+      },
+      {
+        text: "Cancelar",
+        role: "cancel"
+      }]
+    })
+    alert.present()
   }
 
   toCadManutencao() {
