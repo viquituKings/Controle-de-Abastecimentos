@@ -1,23 +1,19 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div id="center">
+    <ion-img src="../../../assets/logo.png"></ion-img>
+    <ion-input class="inp-login" label="Digite seu Email:" labelPlacement="floating" [(ngModel)]="inpEmailLogin"
+      type="email" autocomplete="email" fill="outline" required></ion-input>
+    <ion-input class="inp-login" label="Digite sua Senha:" labelPlacement="floating" [(ngModel)]="inpSenhaLogin"
+      type="password" autocomplete="password" fill="outline" required></ion-input>
 
-  <ion-img src="../../../assets/logo.png"></ion-img>
-  <ion-item>
-    <ion-label position="floating">Digite seu Email:</ion-label>
-    <ion-input [(ngModel)]="inpEmailLogin" type="email" autocomplete="email" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Digite sua Senha:</ion-label>
-    <ion-input [(ngModel)]="inpSenhaLogin" type="password" required></ion-input>
-  </ion-item>
-
-  <ion-button fill="clear" (click)="alertRecuperarSenha()">Esqueci minha senha</ion-button>
-  <ion-button fill="outline" expand="block" (click)="logar()">Login</ion-button>
-  <ion-button fill="outline" expand="block" (click)="toCadastro()">Cadastro</ion-button>
-
+    <ion-button class="btn-rec-senha" fill="clear" (click)="alertRecuperarSenha()">Esqueci minha senha</ion-button>
+    <ion-button class="btn-login" fill="outline" expand="block" (click)="logar()">Login</ion-button>
+    <ion-button class="btn-login" fill="outline" expand="block" (click)="toCadastro()">Cadastro</ion-button>
+  </div>
 </ion-content>

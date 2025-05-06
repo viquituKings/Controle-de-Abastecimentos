@@ -9,36 +9,36 @@ import { MenuController, NavController, AlertController, ToastController, Loadin
 })
 export class UsuarioPage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, 
-    public navCtrl : NavController,
-    public alertCtrl : AlertController,
-    public toastCtrl : ToastController,
-    public loadCtrl : LoadingController) { }
+  constructor(public menuCtrl: MenuController,
+    public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
+    public loadCtrl: LoadingController) { }
 
   auth = getAuth()
-  inpNomeCadastro : string = ""
-  inpEmailCadastro : string = ""
-  inpSenhaCadastro : string = ""
-  inpConfSenhaCadastro : string = ""
+  inpNomeCadastro: string = ""
+  inpEmailCadastro: string = ""
+  inpSenhaCadastro: string = ""
+  inpConfSenhaCadastro: string = ""
 
   ngOnInit() {
     this.menuCtrl.enable(false)
     this.alertLGPD()
   }
 
-  async alertLGPD(){
+  async alertLGPD() {
     const alert = await this.alertCtrl.create({
-      header : "Aviso sobre uso de dados!",
+      header: "Aviso sobre uso de dados!",
       subHeader: "Dados necessários para cadastro e suas finalidades:",
-      message: `Email: Acesso ao aplicativo e identificação de dados de veículos no Banco de dados </br> Nome: Identificação do usuário no banco de dados </br> Aceite este termo para continuar a utilizar a aplicação.`,
-      buttons:[
+      message: "Email: Acesso ao aplicativo e identificação de dados de veículos no Banco de dados; " + "Nome: Identificação do usuário no banco de dados. " + " Aceite este termo para continuar a utilizar a aplicação.",
+      buttons: [
         {
-        text: "Aceito!",
-        role: 'cancel'
+          text: "Aceito!",
+          role: 'cancel'
         },
         {
           text: "Recuso!",
-          handler: ()=>{
+          handler: () => {
             this.toLogin()
           }
         }
@@ -47,41 +47,41 @@ export class UsuarioPage implements OnInit {
     alert.present()
   }
 
-  async cadastrar(){
+  async cadastrar() {
     const load = await this.loadCtrl.create({
-      message : 'Tentando cadastrar usuário...'
+      message: 'Tentando cadastrar usuário...'
     })
-    if (this.inpEmailCadastro == "" || this.inpSenhaCadastro == "" || this.inpConfSenhaCadastro == "" || this.inpNomeCadastro == ""){
+    if (this.inpEmailCadastro == "" || this.inpSenhaCadastro == "" || this.inpConfSenhaCadastro == "" || this.inpNomeCadastro == "") {
       this.alertCamposVazios();
-    }else if(this.inpSenhaCadastro == this.inpConfSenhaCadastro){
+    } else if (this.inpSenhaCadastro == this.inpConfSenhaCadastro) {
       load.present()
       createUserWithEmailAndPassword(this.auth, this.inpEmailCadastro, this.inpSenhaCadastro)
-      .then((usuario) => {
-        load.dismiss()
-        this.atualizaNome()
-        this.toastCadastroOk()
-        this.toLogin()
-      }).catch((erro) => {
-        load.dismiss()
-        this.alertImpossivelCadastrar()
-      })
-    }else{
+        .then((usuario) => {
+          load.dismiss()
+          this.atualizaNome()
+          this.toastCadastroOk()
+          this.toLogin()
+        }).catch((erro) => {
+          load.dismiss()
+          this.alertImpossivelCadastrar()
+        })
+    } else {
       load.dismiss()
       this.alertSenhasDivergentes()
     }
 
   }
 
-  async alertCamposVazios(){
+  async alertCamposVazios() {
     const alert = await this.alertCtrl.create({
       header: 'Ops...',
       subHeader: 'Favor, preencha todos os campos antes de continuar.',
-      buttons:['Ok']
+      buttons: ['Ok']
     })
     await alert.present()
   }
 
-  async alertSenhasDivergentes(){
+  async alertSenhasDivergentes() {
     const alert = await this.alertCtrl.create({
       header: 'Ops...',
       subHeader: 'Favor, verificar se as senhas correspondem uma com a outra',
@@ -90,7 +90,7 @@ export class UsuarioPage implements OnInit {
     await alert.present()
   }
 
-  async alertImpossivelCadastrar(){
+  async alertImpossivelCadastrar() {
     const alert = await this.alertCtrl.create({
       header: 'Ops...',
       subHeader: 'Ocorreu algum erro durante seu cadastro, verifique se seu email esta correto ou se sua conta ja não foi cadastrada',
@@ -99,7 +99,7 @@ export class UsuarioPage implements OnInit {
     await alert.present()
   }
 
-  async toastCadastroOk(){
+  async toastCadastroOk() {
     const toast = await this.toastCtrl.create({
       message: 'Cadastro realizado com sucesso!',
       icon: 'checkmark-circle-outline',
@@ -108,9 +108,9 @@ export class UsuarioPage implements OnInit {
     await toast.present()
   }
 
-  async atualizaNome(){
+  async atualizaNome() {
     const load = await this.loadCtrl.create({
-      message : 'Atualizando dados...'
+      message: 'Atualizando dados...'
     })
     load.present()
     updateProfile(this.auth.currentUser, {
@@ -120,7 +120,7 @@ export class UsuarioPage implements OnInit {
     load.dismiss()
   }
 
-  toLogin(){
+  toLogin() {
     this.navCtrl.navigateForward("login")
   }
 }

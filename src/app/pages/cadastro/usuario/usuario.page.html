@@ -1,29 +1,23 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-back-button slot="start"></ion-back-button>
     <ion-title>Cadastro de Usuários</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item>
-    <ion-label position="floating">Insira seu Nome:</ion-label>
-    <ion-input [(ngModel)]="inpNomeCadastro" type="text" autocomplete="name" required></ion-input>
-  </ion-item>
+  <div id="center">
+    <ion-label id="txt-cadastro"> Preencha os campos conforme solicitado:</ion-label>
+    <ion-input [(ngModel)]="inpNomeCadastro" type="text" autocomplete="name" class="inp-cadastro"
+      label="Insira seu Nome:" labelPlacement="floating" fill="outline" required></ion-input>
+    <ion-input [(ngModel)]="inpEmailCadastro" type="email" autocomplete="email" class="inp-cadastro"
+      label="Insira seu Email:" labelPlacement="floating" fill="outline" required></ion-input>
+    <ion-input [(ngModel)]="inpSenhaCadastro" type="password" class="inp-cadastro" label="Insira sua Senha:"
+      labelPlacement="floating" fill="outline" required></ion-input>
+    <ion-input [(ngModel)]="inpConfSenhaCadastro" type="password" class="inp-cadastro" label="Confirme sua Senha:"
+      labelPlacement="floating" fill="outline" required>
+    </ion-input>
 
-  <ion-item>
-    <ion-label position="floating">Insira seu Email:</ion-label>
-    <ion-input [(ngModel)]="inpEmailCadastro" type="email" autocomplete="email" required></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Cadastre sua senha (Mínimo de 6 digs):</ion-label>
-    <ion-input [(ngModel)]="inpSenhaCadastro" type="password" required></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Confirme sua Senha (Mínimo de 6 digs):</ion-label>
-    <ion-input [(ngModel)]="inpConfSenhaCadastro" type="password" required></ion-input>
-  </ion-item>
-
-  <ion-button color="success" fill="outline" expand="block" (click)="cadastrar()">Cadastrar</ion-button>
+    <ion-button class="btn-cadastro" color="success" fill="outline" expand="block"
+      (click)="cadastrar()">Cadastrar</ion-button>
+  </div>
 </ion-content>
