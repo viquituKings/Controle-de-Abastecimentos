@@ -1,61 +1,61 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Cadastrar Veículos</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div id="center">
+    <ion-label id="textCadV"> Preencha os campos conforme solicitado:</ion-label>
+    <div class="itemCadV" fill="outline">
+        <ion-label>Placa do veículo:</ion-label>
+      <div class="itemInputCadV">
+        <ion-input [(ngModel)]="inpPlaca1" placeholder="AAA" type="text" maxlength="3" minlength="3"
+          required></ion-input>
+        <ion-label> - </ion-label>
+        <ion-input [(ngModel)]="inpPlaca2" placeholder="1A34" type="text" maxlegth="4" minlength="4"
+          required></ion-input>
+      </div>
+    </div>
 
-  <ion-item>
-    <ion-label>Digite a placa do veículo:</ion-label>
-    <ion-input [(ngModel)]="inpPlaca1" placeholder="AAA" type="text" maxlength="3" minlength="3" required></ion-input>
-    <ion-label> - </ion-label>
-    <ion-input [(ngModel)]="inpPlaca2" placeholder="1A34" type="text" maxlegth="4" minlength="4" required></ion-input>
-  </ion-item>
+    <div class="itemCadV" fill="outline">
 
-  <ion-label>Selecione o tipo do veículo:</ion-label>
-  <ion-radio-group [(ngModel)]="radioTipoVeiculo" required="true" (ionChange)="carregarMarcas()">
-    <ion-item>
-      <ion-item>
-        <ion-label>Carro</ion-label>
-        <ion-radio value="carro" slot="start" ></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Moto</ion-label>
-        <ion-radio value="moto" slot="start" ></ion-radio>
-      </ion-item>
-    </ion-item>
-  </ion-radio-group>
-  <ion-item>
-    <ion-label position="floating">Marca do veículo</ion-label>
-    <ion-select [(ngModel)]="selectMarca" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="carregarModelos()">
-      <ion-select-option  *ngFor="let marca of marcas"  value="{{marca.id}}">{{marca.nomeMarca}}</ion-select-option>
+        <ion-label>Selecione o tipo do veículo:</ion-label>
+
+      <ion-radio-group [(ngModel)]="radioTipoVeiculo" required="true" (ionChange)="carregarMarcas()">
+        <div class="itemRadioCadV">
+          <div class="itemRadioItemCadV">
+            <ion-radio value="carro" slot="start"></ion-radio>
+            <ion-label>Carro</ion-label>
+          </div>
+          <div class="itemRadioItemCadV">
+            <ion-radio value="moto" slot="start"></ion-radio>
+            <ion-label>Moto</ion-label>
+          </div>
+        </div>
+      </ion-radio-group>
+    </div>
+
+    <ion-select class="selectCadV" label="Marca do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="selectMarca" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="carregarModelos()">
+      <ion-select-option *ngFor="let marca of marcas" value="{{marca.id}}">{{marca.nomeMarca}}</ion-select-option>
     </ion-select>
-  </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Modelo do veículo</ion-label>
-    <ion-select [(ngModel)]="selectModelo" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="setCilindrada()">
-      <ion-select-option *ngFor = "let modelo of modelos" value="{{modelo.id}}">{{modelo.nomeModelo}}</ion-select-option>
+    <ion-select class="selectCadV" label="Modelo do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="selectModelo" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="setCilindrada()">
+      <ion-select-option *ngFor="let modelo of modelos" value="{{modelo.id}}">{{modelo.nomeModelo}}</ion-select-option>
     </ion-select>
-  </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Digite o ano do veículo:</ion-label>
-    <ion-input [(ngModel)]="inpAnoVeiculo" type="number" max=2099 min=1900 required="true"></ion-input>
-  </ion-item>
+    <ion-input class="inputCadV" label="Ano do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpAnoVeiculo" type="number" max=2099 min=1900 required="true"></ion-input>
 
-  <ion-item>
-    <ion-label position="floating">Digite a cilindrada do veículo:</ion-label>
-    <ion-input [(ngModel)]="inpCilindradaVeiculo" type="number" required="true"></ion-input>
-  </ion-item>
+    <ion-input class="inputCadV" label="Cilindrada do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpCilindradaVeiculo" type="number" required="true"></ion-input>
 
-  <ion-item>
-    <ion-label position="floating">Digite o Km Atual do veículo:</ion-label>
-    <ion-input [(ngModel)]="inpKmAtual" type="number" required="true"></ion-input>
-  </ion-item>
+    <ion-input class="inputCadV" label="Km Atual do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpKmAtual" type="number" required="true"></ion-input>
 
-  <ion-button color="success" fill="outline" expand="block" (click)="cadastrar()">Cadastrar</ion-button>
-  <ion-button color="danger" fill="outline" expand="block" (click)="toHome()">Cancelar</ion-button>
-
+    <ion-button class="btnCadV" color="success" fill="outline" expand="block" (click)="cadastrar()">Cadastrar</ion-button>
+    <ion-button class="btnCadV" color="danger" fill="outline" expand="block" (click)="toHome()">Cancelar</ion-button>
+  </div>
 </ion-content>

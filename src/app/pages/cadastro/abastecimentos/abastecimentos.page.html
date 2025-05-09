@@ -1,65 +1,46 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Cadastrar Abastecimentos</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-
-  <ion-item>
-    <ion-label position="floating">Selecione o veículo</ion-label>
-    <ion-select [(ngModel)]="selectVeiculoCadAbast"  okText="Pronto!" cancelText="Cancelar" required (ionChange)="atualizarDados()" >
-      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.indice}}">{{veiculo.modelo}} - {{veiculo.placa}}</ion-select-option>
+  <div id="center">
+    <ion-label id="textCadComb">Preencha os campos conforme solicitado:</ion-label>
+    <ion-select class="selectCadComb" label="Selecione o veículo: " labelPlacement="floating"
+      [(ngModel)]="selectVeiculoCadAbast" okText="Pronto!" cancelText="Cancelar" fill="outline" required
+      (ionChange)="atualizarDados()">
+      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.indice}}">{{veiculo.modelo}} -
+        {{veiculo.placa}}</ion-select-option>
     </ion-select>
-  </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Selecione o tipo de combustível abastecido</ion-label>
-    <ion-select [(ngModel)]="selectCombAbastecido" okText="Pronto!" cancelText="Cancelar" required>
+    <ion-select class="selectCadComb" label="Selecione o combustível abastecido: " labelPlacement="floating"
+      fill="outline" [(ngModel)]="selectCombAbastecido" okText="Pronto!" cancelText="Cancelar" required>
       <ion-select-option value="Gasolina">Gasolina</ion-select-option>
+      <ion-select-option value="Gasolina aditivada">Gasolina aditivada</ion-select-option>
       <ion-select-option value="Etanol">Etanol</ion-select-option>
       <ion-select-option value="Diesel">Diesel</ion-select-option>
     </ion-select>
-  </ion-item>
 
-  <ion-item>
-    <ion-checkbox [(ngModel)]="checkboxCombAditivado" slot="start" value="true"></ion-checkbox>
-    <ion-label>Aditivado</ion-label>
-  </ion-item>
+    <ion-input class="inputCadComb" label="Selecione a data do abastecimento" labelPlacement="floating" fill="outline"
+      [(ngModel)]="dataAbastecimento" type="date"></ion-input>
 
-  <ion-item>
-    <ion-label position="floating">Selecione a data do abastecimento</ion-label>
-    <ion-input [(ngModel)]="dataAbastecimento" type="date" ></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-checkbox [(ngModel)]="checkboxTanqueCheio" slot="start" value="true"></ion-checkbox>
-    <ion-label>Tanque cheio</ion-label>
-  </ion-item>
-
-  <ion-item>
-    <ion-item>
-      <ion-label position="floating">Ultimo Km:</ion-label>
-      <ion-input [(ngModel)]="inpUltimoKmCadAbast" disabled="true"></ion-input>
+    <ion-item id="checkboxCadComb" fill="outline">
+      <ion-checkbox [(ngModel)]="checkboxTanqueCheio" slot="start" value="true"></ion-checkbox>
+      <ion-label>Tanque cheio</ion-label>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Km Atual:</ion-label>
-      <ion-input [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
+    <ion-item class="inputCadComb" fill="outline">
+      <ion-input class="inputKmCadComb" label="Ultimo Km: " labelPlacement="floating"
+        [(ngModel)]="inpUltimoKmCadAbast" disabled="true"></ion-input>
+      <ion-input class="inputKmCadComb" label="Km Atual: " labelPlacement="floating"
+        [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
     </ion-item>
-  </ion-item>
-
-
-  <ion-item>
-    <ion-label position="floating">Quantidade Abastecida (Litros)</ion-label>
-    <ion-input [(ngModel)]="inpQdtAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Valor do litro (R$)</ion-label>
-    <ion-input [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
-  </ion-item>
-
-  <ion-button color="success" fill="outline" expand="block" (click)="cadastrarAbastecimento()">cadastrar</ion-button>
-  <ion-button color="danger" fill="outline" expand="block" (click)="toHome()">cancelar</ion-button>
+    <ion-input class="inputCadComb" label="Quantidade abastecida (litros): " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpQdtAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
+    <ion-input class="inputCadComb" label="Valor do litro (R$): " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
+    <ion-button class="btnCadComb" color="success" fill="outline" expand="block" (click)="cadastrarAbastecimento()">cadastrar</ion-button>
+    <ion-button class="btnCadComb" color="danger" fill="outline" expand="block" (click)="toHome()">cancelar</ion-button>
+  </div>
 </ion-content>
