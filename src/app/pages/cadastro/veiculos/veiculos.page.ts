@@ -72,6 +72,7 @@ export class VeiculosPage implements OnInit {
       message: 'Carregando marcas...'
     })
     load.present()
+    const selMarca = document.getElementById("selectMarcaCadV").setAttribute("disabled", "false")
     this.marcas = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/`))
@@ -91,6 +92,7 @@ export class VeiculosPage implements OnInit {
       message: 'Carregando modelos...'
     })
     load.present()
+    const selMod = document.getElementById("selectModeloCadV").setAttribute("disabled", "false")
     this.modelos = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/${this.marcas[this.selectMarca].valor}/modelos`))
@@ -112,6 +114,13 @@ export class VeiculosPage implements OnInit {
       i++
     })
     load.dismiss()
+  }
+
+  async modeloSelecionado(){
+    const inpAno = document.getElementById("inpAnoCadV").setAttribute("disabled", "false")
+    const inpCilindrada = document.getElementById("inpCilindradaCadV").setAttribute("disabled", "false")
+    const inpKm = document.getElementById("inpKmCadV").setAttribute("disabled", "false")
+    this.setCilindrada()
   }
 
   async setCilindrada() {

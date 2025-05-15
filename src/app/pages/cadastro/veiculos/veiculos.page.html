@@ -36,23 +36,23 @@
       </ion-radio-group>
     </div>
 
-    <ion-select class="selectCadV" label="Marca do veículo: " labelPlacement="floating" fill="outline"
+    <ion-select disabled="true" id="selectMarcaCadV" class="selectCadV" label="Marca do veículo: " labelPlacement="floating" fill="outline"
       [(ngModel)]="selectMarca" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="carregarModelos()">
       <ion-select-option *ngFor="let marca of marcas" value="{{marca.id}}">{{marca.nomeMarca}}</ion-select-option>
     </ion-select>
 
-    <ion-select class="selectCadV" label="Modelo do veículo: " labelPlacement="floating" fill="outline"
-      [(ngModel)]="selectModelo" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="setCilindrada()">
+    <ion-select disabled="true" id="selectModeloCadV" class="selectCadV" label="Modelo do veículo: " labelPlacement="floating" fill="outline"
+      [(ngModel)]="selectModelo" okText="Pronto!" cancelText="Cancelar" required="true" (ionChange)="modeloSelecionado()">
       <ion-select-option *ngFor="let modelo of modelos" value="{{modelo.id}}">{{modelo.nomeModelo}}</ion-select-option>
     </ion-select>
 
-    <ion-input class="inputCadV" label="Ano do veículo: " labelPlacement="floating" fill="outline"
+    <ion-input disabled="true" id="inpAnoCadV" class="inputCadV" label="Ano do veículo: " labelPlacement="floating" fill="outline"
       [(ngModel)]="inpAnoVeiculo" type="number" max=2099 min=1900 required="true"></ion-input>
 
-    <ion-input class="inputCadV" label="Cilindrada do veículo: " labelPlacement="floating" fill="outline"
+    <ion-input disabled="true" id="inpCilindradaCadV" class="inputCadV" label="Cilindrada do veículo: " labelPlacement="floating" fill="outline"
       [(ngModel)]="inpCilindradaVeiculo" type="number" required="true"></ion-input>
 
-    <ion-input class="inputCadV" label="Km Atual do veículo: " labelPlacement="floating" fill="outline"
+    <ion-input disabled="true" id="inpKmCadV" class="inputCadV" label="Km Atual do veículo: " labelPlacement="floating" fill="outline"
       [(ngModel)]="inpKmAtual" type="number" required="true"></ion-input>
 
     <ion-button class="btnCadV" color="success" fill="outline" expand="block" (click)="cadastrar()">Cadastrar</ion-button>

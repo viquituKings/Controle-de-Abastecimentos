@@ -12,6 +12,18 @@
   <ion-button (click)="toCadAbastecimento()" expand="block" shape="round" fill="clear" color="medium">Cadastrar abastecimento</ion-button>
   <ion-button (click)="toMeusVeiculos()" expand="block" shape="round" fill="clear" color="medium">Exibir meus veículos</ion-button>
   <ion-button (click)="toMeusAbastecimentos()" expand="block" shape="round" fill="clear" color="medium">Exibir meus abastecimentos</ion-button>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Calculadora de Equivalência</ion-card-title>
+      <ion-card-subtitle>Descubra se vale a pena abastecer com Gasolina ou Etanol</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input [(ngModel)]="valEtanol" placeholder="Digite o valor do Etanol"></ion-input>
+      <ion-input [(ngModel)]="valGasolina" placeholder="Digite o valor da Gasolina"></ion-input>
+      <ion-button (click)="calcularEquivalencia()" fill="clear"> Calcular </ion-button>
+    </ion-card-content>
+  </ion-card>
+  
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="medium">
       <ion-icon name="add"></ion-icon>
