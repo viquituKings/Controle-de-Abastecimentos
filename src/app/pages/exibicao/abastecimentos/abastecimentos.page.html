@@ -1,57 +1,58 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Meus Abastecimentos</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item>
-    <ion-label position="floating">Selecione o veículo</ion-label>
-    <ion-select [(ngModel)]="selectVeiculoExibeAbast" okText="Pronto!" cancelText="Cancelar"
-      (ionChange)="carregarMedias()">
-      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.placa}}">{{veiculo.modelo}} -
-        {{veiculo.placa}}</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>Resumo geral: <br><br>
-      <p>Valor total: R$ {{valorTotal.toFixed(2)}}</p> <br>
-      <p>Quantidade total: {{quantidadeTotal.toFixed(1)}} Litros</p> <br>
-      <p>Média de rendimento geral: {{mediaTotal.toFixed(2)}} km/l </p>
-    </ion-label>
-  </ion-item>
-  <ion-accordion-group>
-    <ion-accordion *ngFor="let media of medias">
-      <ion-item slot="header">
-        <ion-label>
-          {{media.data}}
-        </ion-label>
-      </ion-item>
-      <ion-item slot="content">
-        <ion-label>
-          <!-- <ion-button color="danger" (click)="alertDeleteMedia(media.id)">
+  <div id="center">
+    <div id="selectMeusAbastecimentos" >
+      <ion-select [(ngModel)]="selectVeiculoExibeAbast" fill="outline" label="Selecione o veículo: "
+        labelPlacement="floating" okText="Pronto!" cancelText="Cancelar" (ionChange)="carregarMedias()">
+        <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.placa}}">{{veiculo.modelo}} -
+          {{veiculo.placa}}</ion-select-option>
+      </ion-select>
+    </div>
+    <div class="containerMeusAbastecimentos">
+      <ion-label>Resumo geral: <br><br>
+        <p>Valor total: R$ {{valorTotal.toFixed(2)}}</p> <br>
+        <p>Quantidade total: {{quantidadeTotal.toFixed(1)}} Litros</p> <br>
+        <p>Média de rendimento geral: {{mediaTotal.toFixed(2)}} km/l </p>
+      </ion-label>
+    </div>
+    <ion-accordion-group id="accordionGroupMeusAbastecimentos">
+      <ion-accordion class="containerMeusAbastecimentos" *ngFor="let media of medias">
+        <ion-item slot="header">
+          <ion-label>
+            {{media.data}}
+          </ion-label>
+        </ion-item>
+        <ion-item slot="content">
+          <ion-label>
+            <!-- <ion-button color="danger" (click)="alertDeleteMedia(media.id)">
             <ion-icon name="trash"></ion-icon>
           </ion-button> -->
-          <br>
-          Combustível abastecido: {{media.combustivel}} <br>
-          <ion-item>
-            <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
-            <ion-label>Combustível aditivado</ion-label>
-          </ion-item>
-          km Antígo: {{media.kmAntigo}} Km<br>
-          km Abastecimento: {{media.kmAtual}} Km<br>
-          Média de Km/lítro: {{media.media.toFixed(2)}} Km/l<br>
-          Valor do lítro: R$ {{media.valorLitro}} <br>
-          Lítros abastecidos: {{media.qdtAbastecida}} L <br>
-          <ion-item>
-            <ion-checkbox disabled="true" checked="{{media.seTanqueCheio}}"></ion-checkbox>
-            <ion-label>Tanque Cheio</ion-label>
-          </ion-item> <br>
-          Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}} <br>
-          Custo por Km: R$ {{((media.valorLitro * media.qdtAbastecida)/(media.kmAtual-media.kmAntigo)).toFixed(2)}}
-          
-        </ion-label>
-      </ion-item>
-    </ion-accordion>
-  </ion-accordion-group>
+            <br>
+            Combustível abastecido: {{media.combustivel}} <br>
+            <ion-item>
+              <ion-checkbox disabled="true" checked="{{media.seAditivado}}"></ion-checkbox>
+              <ion-label>Combustível aditivado</ion-label>
+            </ion-item>
+            km Antígo: {{media.kmAntigo}} Km<br>
+            km Abastecimento: {{media.kmAtual}} Km<br>
+            Média de Km/lítro: {{media.media.toFixed(2)}} Km/l<br>
+            Valor do lítro: R$ {{media.valorLitro}} <br>
+            Lítros abastecidos: {{media.qdtAbastecida}} L <br>
+            <ion-item>
+              <ion-checkbox disabled="true" checked="{{media.seTanqueCheio}}"></ion-checkbox>
+              <ion-label>Tanque Cheio</ion-label>
+            </ion-item> <br>
+            Total do abastecimento: R$ {{(media.valorLitro * media.qdtAbastecida).toFixed(2)}} <br>
+            Custo por Km: R$ {{((media.valorLitro * media.qdtAbastecida)/(media.kmAtual-media.kmAntigo)).toFixed(2)}}
+
+          </ion-label>
+        </ion-item>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
 </ion-content>

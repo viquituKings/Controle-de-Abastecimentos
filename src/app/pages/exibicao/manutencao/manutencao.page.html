@@ -1,38 +1,41 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-back-button slot="start"></ion-back-button>
+  <ion-toolbar mode="ios">
+    <ion-back-button slot="start" text="Voltar"></ion-back-button>
     <ion-title>Manutenção Periódica</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item>
-    <ion-label>{{modPlaca}}</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Última revisão (km):</ion-label>
-    <ion-input [(ngModel)]="ultimaRevKm" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Próxima revisão (km):</ion-label>
-    <ion-input [(ngModel)]="proxRevKm" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Última troca de óleo (km):</ion-label>
-    <ion-input [(ngModel)]="ultimaTrocaOleoKm" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Próxima troca de óleo (km):</ion-label>
-    <ion-input [(ngModel)]="proxTrocaOleoKm" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Manutenção freio dianteiro (km):</ion-label>
-    <ion-input [(ngModel)]="manFreioDiant" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Manutenção freio traseiro (km):</ion-label>
-    <ion-input [(ngModel)]="manFreioTras" disabled></ion-input>
-  </ion-item>
-  <ion-button expand="block" fill="outline" (click)="cadRevisao()" >cadastrar revisão</ion-button>
-  <ion-button expand="block" fill="outline" (click)="cadTrocaOleo()">cadastrar troca de óleo</ion-button>
-  <ion-button expand="block" fill="outline" (click)="cadLadoManFreios()">cadastrar manutenção dos freios</ion-button>
+  <div id="center">
+    <ion-item class="itemVerManutencao">
+      <ion-input [(ngModel)]="modPlaca" label="Veículo: " labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="ultimaRevKm" label="Última revisão (Km): "
+      labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="proxRevKm" label="Próxima revisão (km):" labelPlacement="floating"
+      disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="ultimaTrocaOleoKm" label="Última troca de óleo (km):"
+      labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="proxTrocaOleoKm" label="Próxima troca de óleo (km):"
+      labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="manFreioDiant" label="Manutenção freio dianteiro (km):"
+      labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemVerManutencao">
+    <ion-input [(ngModel)]="manFreioTras" label="Manutenção freio traseiro (km):"
+      labelPlacement="floating" disabled></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" fill="outline" (click)="cadRevisao()">cadastrar revisão</ion-button>
+    <ion-button expand="block" fill="outline" (click)="cadTrocaOleo()">cadastrar troca de óleo</ion-button>
+    <ion-button expand="block" fill="outline" (click)="cadLadoManFreios()">cadastrar manutenção dos freios</ion-button>
+  </div>
 </ion-content>

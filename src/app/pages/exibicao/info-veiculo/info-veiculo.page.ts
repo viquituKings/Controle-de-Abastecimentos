@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertButton, AlertController, LoadingController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDoc, getFirestore,doc } from 'firebase/firestore';
 

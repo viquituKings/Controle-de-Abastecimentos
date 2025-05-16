@@ -9,17 +9,17 @@ import { Component } from '@angular/core';
 export class AppComponent {
   public appPages = [
     { title: 'Página Inicial', url: 'home', icon: 'home' },
-    { title: 'Cadastrar Veículos', url: 'cadastro-veiculos', icon: 'add-circle'},
-    { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill'},
-    { title: 'Meus Veículos', url: 'exibir-veiculos', icon: 'car'},
-    { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud'},
+    { title: 'Cadastrar Veículos', url: 'cadastro-veiculos', icon: 'add-circle' },
+    { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill' },
+    { title: 'Meus Veículos', url: 'exibir-veiculos', icon: 'car' },
+    { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud' },
   ];
-  constructor(public navCtrl : NavController,
-              public menuCtrl : MenuController) {}
+  constructor(public navCtrl: NavController,
+    public menuCtrl: MenuController) { }
 
   auth = getAuth()
 
-  logout(){
+  logout() {
     signOut(this.auth).then((sucesso) => {
       console.log("logout com sucesso")
       this.toLogin()
@@ -28,15 +28,19 @@ export class AppComponent {
     })
   }
 
-  toLogin(){
+  toLogin() {
     this.navCtrl.navigateForward("login")
     this.menuCtrl.close()
     this.menuCtrl.enable(false)
   }
 
-  toExibeUsuario(){
+  toExibeUsuario() {
     this.navCtrl.navigateForward("exibir-usuario");
     this.menuCtrl.close()
 
+  }
+
+  comentario() {
+    window.location.href = "mailto:sac.reissoftware@gmail.com?subject=Comentários%20sobre%20o%20app%20Controle%20de%20Abastecimentos"
   }
 }

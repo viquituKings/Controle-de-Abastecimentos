@@ -1,41 +1,43 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-back-button slot="start"></ion-back-button>
+  <ion-toolbar mode=ios>
+    <ion-back-button slot="start" text="Voltar"></ion-back-button>
     <ion-title>{{placaVeiculo}}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item>
-    <ion-label position="floating">Tipo de Veiculo</ion-label>
-    <ion-input [(ngModel)]="tipoVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Marca do Veiculo</ion-label>
-    <ion-input [(ngModel)]="marcaVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Modelo do Veiculo</ion-label>
-    <ion-input [(ngModel)]="modeloVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Ano do Veiculo</ion-label>
-    <ion-input [(ngModel)]="anoVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Cilindrada do Veiculo</ion-label>
-    <ion-input [(ngModel)]="cilindradaVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Km Atual do Veiculo</ion-label>
-    <ion-input [(ngModel)]="kmAtualVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Próxima Troca de óleo</ion-label>
-    <ion-input [(ngModel)]="proxTrOleoKmVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Próxima revisão</ion-label>
-    <ion-input [(ngModel)]="proxRevKmVeiculo" fill="outline" disabled></ion-input>
-  </ion-item>
-  
+  <div id="center">
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Tipo de Veiculo</ion-label>
+      <ion-input [(ngModel)]="tipoVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Marca do Veiculo</ion-label>
+      <ion-input [(ngModel)]="marcaVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Modelo do Veiculo</ion-label>
+      <ion-input [(ngModel)]="modeloVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Ano do Veiculo</ion-label>
+      <ion-input [(ngModel)]="anoVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Cilindrada do Veiculo</ion-label>
+      <ion-input [(ngModel)]="cilindradaVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Km Atual do Veiculo</ion-label>
+      <ion-input [(ngModel)]="kmAtualVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Próxima Troca de óleo</ion-label>
+      <ion-input [(ngModel)]="proxTrOleoKmVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+    <ion-item class="itemInfoVeiculo">
+      <ion-label position="floating">Próxima revisão</ion-label>
+      <ion-input [(ngModel)]="proxRevKmVeiculo" fill="outline" disabled></ion-input>
+    </ion-item>
+  </div>
+
 </ion-content>

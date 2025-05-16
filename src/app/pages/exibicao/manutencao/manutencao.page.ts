@@ -48,7 +48,7 @@ export class ManutencaoPage implements OnInit {
     if (veiculo.exists()) {
       if (veiculo.get('cadManPeriodica') != null && veiculo.get('cadManPeriodica') != false) {
         this.veiculo = veiculo.data()
-        this.modPlaca = (veiculo.get('modelo') + " - " + veiculo.get('placa'))
+        this.modPlaca = (veiculo.get('marca') + " " + veiculo.get('modelo') + " - " + veiculo.get('placa'))
         this.ultimaRevKm = veiculo.get('ultimaRevisaoKm')
         this.proxRevKm = veiculo.get('proxRevKm')
         this.ultimaTrocaOleoKm = veiculo.get('ultimaTrocaOleoKm')
