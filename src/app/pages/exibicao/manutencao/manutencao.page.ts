@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, getDoc, getFirestore, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDoc, getFirestore, doc, updateDoc, setDoc, getDocs } from 'firebase/firestore';
 
 @Component({
   selector: 'app-manutencao',
@@ -31,10 +31,29 @@ export class ManutencaoPage implements OnInit {
   proxTrocaOleoKm: number
   manFreioDiant: number
   manFreioTras: number
+  tipoManutencao: any = []
+  selectTipoMan: string = 'TODAS'
+  manutencoes: any = []
 
   ngOnInit() {
     onAuthStateChanged(this.auth, user => {
       this.userEmail = user.email
+      this.tipoManutencao[0] = {
+        nome: 'Freios',
+        valor: 'MANFREIO'
+      }
+      this.tipoManutencao[1] = {
+        nome: 'Troca de óleo',
+        valor: 'TROLEO'
+      }
+      this.tipoManutencao[2] = {
+        nome: 'Revisão',
+        valor: 'REVISAO'
+      }
+      this.tipoManutencao[3] = {
+        nome: 'Todas',
+        valor: 'TODAS'
+      }
       this.carregarDados()
     })
   }
@@ -48,6 +67,7 @@ export class ManutencaoPage implements OnInit {
     if (veiculo.exists()) {
       if (veiculo.get('cadManPeriodica') != null && veiculo.get('cadManPeriodica') != false) {
         this.veiculo = veiculo.data()
+        this.veiculo.id = veiculo.id
         this.modPlaca = (veiculo.get('marca') + " " + veiculo.get('modelo') + " - " + veiculo.get('placa'))
         this.ultimaRevKm = veiculo.get('ultimaRevisaoKm')
         this.proxRevKm = veiculo.get('proxRevKm')
@@ -56,11 +76,35 @@ export class ManutencaoPage implements OnInit {
         this.manFreioDiant = veiculo.get('manFreioDiant')
         this.manFreioTras = veiculo.get('manFreioTras')
         load.dismiss()
-      }else{
+        this.buscarManutencoes()
+      } else {
         load.dismiss()
         this.verificarManPeriodica()
       }
     }
+  }
+
+  async buscarManutencoes() {
+    const load = await this.loadCtrl.create({
+      message: 'Carregando manutenções...'
+    })
+    load.present()
+    this.manutencoes = []
+    let i = 0
+    const consulta = await getDocs(collection(getFirestore(), `users/${this.userEmail}/manutencoes`))
+    consulta.forEach(doc => {
+      if (doc.get('veiculoId') === this.veiculo.id) {
+        if (this.selectTipoMan == 'TODAS') {
+          this.manutencoes[i] = doc.data()
+          i++
+        } else if (doc.get('tipoManutencaoVal') === this.selectTipoMan) {
+          this.manutencoes[i] = doc.data()
+          i++
+        }
+      }
+    })
+    console.log(this.manutencoes)
+    load.dismiss()
   }
 
   async verificarManPeriodica() {
@@ -86,20 +130,11 @@ export class ManutencaoPage implements OnInit {
     alert.present()
   }
 
-  async toastCadOk() {
+  async geradorToast(mensagem: string, icone: string) {
     const toast = await this.toastCtrl.create({
-      message: 'Cadastro Realizado com sucesso!',
+      message: mensagem,
       duration: 1500,
-      icon: 'checkmark-circle-outline'
-    })
-    toast.present()
-  }
-
-  async toastCadErro() {
-    const toast = await this.toastCtrl.create({
-      message: 'Algo deu errado',
-      duration: 1500,
-      icon: 'close-circle-outline'
+      icon: icone
     })
     toast.present()
   }
@@ -128,6 +163,7 @@ export class ManutencaoPage implements OnInit {
     })
 
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: 'Cadastro de revisão',
       subHeader: 'Preencha os campos corretamente:',
       inputs: [
@@ -136,30 +172,51 @@ export class ManutencaoPage implements OnInit {
           placeholder: 'Km na revisão:',
           type: 'number'
         },
+        {
+          name: 'descRev',
+          placeholder: 'Observação: (opcional)',
+          type: 'textarea'
+        },
       ],
       buttons: [
         {
-          text: 'Cadastrar!',
+          text: 'Cadastrar',
           handler: (alertData) => {
-            load.present()
-            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
-              ultimaRevisaoKm: Number(alertData.ultimaRev),
-              proxRevKm: this.calcularProxRev(this.veiculo.revisaoKm, Number(alertData.ultimaRev)),
-              proxTrocaOleoKm: (this.veiculo.trocaOleoKm + Number(alertData.ultimaRev)),
-              ultimaTrocaOleoKm: Number(alertData.ultimaRev)
-            }).then(() => {
-              this.toastCadOk()
+            if (alertData.ultimaRev != 0) {
+              load.present()
+              setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
+                tipoManutencao: "Revisão",
+                tipoManutencaoVal: "REVISAO",
+                kmManutencao: alertData.ultimaRev,
+                descricaoManutencao: alertData.descRev,
+                dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+                veiculo: this.veiculo.placa,
+                veiculoId: this.veiculo.id
+              }).then(() => {
+                updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+                  ultimaRevisaoKm: Number(alertData.ultimaRev),
+                  proxRevKm: this.calcularProxRev(this.veiculo.revisaoKm, Number(alertData.ultimaRev)),
+                  proxTrocaOleoKm: (this.veiculo.trocaOleoKm + Number(alertData.ultimaRev)),
+                  ultimaTrocaOleoKm: Number(alertData.ultimaRev)
+                }).then(() => {
+                  this.geradorToast("Revisão cadastrada!", "checkmark-circle")
+                  load.dismiss()
+                  this.navCtrl.navigateBack('exibir-veiculos')
+                }).catch(() => {
+                  load.dismiss()
+                  this.geradorToast("Algo deu errado, tente novamente", "close-circle")
+                })
+              })
+            } else {
               load.dismiss()
-              this.navCtrl.navigateBack('exibir-veiculos')
-            }).catch(() => {
-              load.dismiss()
-              this.toastCadErro()
-            })
+              this.geradorToast("Preencha o campo obrigatório.", "close-circle")
+            }
+
           }
         },
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'destructive'
         }
       ]
     })
@@ -171,6 +228,7 @@ export class ManutencaoPage implements OnInit {
       message: 'Tentando cadastrar...'
     })
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: 'Cadastro de troca de óleo',
       subHeader: 'Preencha os campos corretamente:',
       inputs: [
@@ -179,36 +237,57 @@ export class ManutencaoPage implements OnInit {
           placeholder: 'Km na troca:',
           type: 'number'
         },
+        {
+          name: 'descTrOleo',
+          placeholder: 'Observação: (opcional)',
+          type: 'textarea'
+        },
       ],
       buttons: [
         {
           text: 'Cadastrar!',
           handler: (alertData) => {
-            load.present()
-            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
-              proxTrocaOleoKm: (this.veiculo.trocaOleoKm + Number(alertData.ultimaTrOleo)),
-              ultimaTrocaOleoKm: Number(alertData.ultimaTrOleo)
-            }).then(() => {
-              this.toastCadOk()
+            if (alertData.ultimaTrOleo != 0) {
+              load.present()
+              setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
+                tipoManutencao: "Troca de Óleo",
+                tipoManutencaoVal: "TROLEO",
+                kmManutencao: alertData.ultimaTrOleo,
+                descricaoManutencao: alertData.descTrOleo,
+                dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+                veiculo: this.veiculo.placa,
+                veiculoId: this.veiculo.id
+              }).then(() => {
+                updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+                  proxTrocaOleoKm: (this.veiculo.trocaOleoKm + Number(alertData.ultimaTrOleo)),
+                  ultimaTrocaOleoKm: Number(alertData.ultimaTrOleo)
+                }).then(() => {
+                  this.geradorToast("Troca de óleo cadastrada!", "checkmark-circle")
+                  load.dismiss()
+                  this.navCtrl.navigateBack('exibir-veiculos')
+                }).catch(() => {
+                  load.dismiss()
+                  this.geradorToast("Algo deu errado, tente novamente", "close-circle")
+                })
+              })
+            } else {
               load.dismiss()
-              this.navCtrl.navigateBack('exibir-veiculos')
-            }).catch(() => {
-              load.dismiss()
-              this.toastCadErro()
-            })
+              this.geradorToast("Preencha o campo obrigatório.", "close-circle")
+            }
           }
         },
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'destructive'
         }
       ]
     })
     await alert.present()
   }
 
-  async cadLadoManFreios(){
+  async cadLadoManFreios() {
     const alert1 = await this.alertCtrl.create({
+      mode: 'ios',
       header: "Manutenção nos freios",
       subHeader: "Selecione o freio:",
       inputs: [
@@ -234,67 +313,96 @@ export class ManutencaoPage implements OnInit {
         },
         {
           text: "Cancelar",
+          role: 'destructive'
         }
       ]
-    }) 
+    })
     alert1.present()
   }
 
-  async cadManFreios(ladoFreios: number){
-    var freio : string
-    if(ladoFreios == 1){
+  async cadManFreios(ladoFreios: number) {
+    var freio: string
+    if (ladoFreios == 1) {
       freio = "Dianteiros"
-    }else if (ladoFreios == 2){
+    } else if (ladoFreios == 2) {
       freio = "Traseiros"
+    } else {
+      this.geradorToast("Selecione o lado do freio.", "close-circle")
+      this.cadLadoManFreios()
     }
     const load = await this.loadCtrl.create({
       message: "Tentando cadastrar..."
     })
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: "Manutenção nos freios",
-      message:"Freios " + freio,
+      message: "Freios " + freio,
       subHeader: "Insira o Km da manutenção realizada:",
-      inputs: [{
-        name: "kmManFreio",
-        type: "number",
-        id: "kmManFreio",
-        placeholder: "Km Manutenção"
-      }],
+      inputs: [
+        {
+          name: "kmManFreio",
+          type: "number",
+          placeholder: "Km Manutenção"
+        },
+        {
+          name: "descManFreio",
+          type: "textarea",
+          placeholder: "Observação: (opcional)"
+        },
+      ],
       buttons: [{
         text: "Confirmar",
         handler: (alertData) => {
           load.present()
-          if(freio == "Dianteiros"){
-            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
-              manFreioDiant: Number(alertData.kmManFreio)
-          }).then(() => {
-            this.toastCadOk()
+          if (alertData.kmManFreio != 0) {
+            setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
+              tipoManutencao: "Manutenção nos freios " + freio,
+              tipoManutencaoVal: "MANFREIO",
+              kmManutencao: alertData.kmManFreio,
+              descricaoManutencao: alertData.descManFreio,
+              dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+              veiculo: this.veiculo.placa,
+              veiculoId: this.veiculo.id
+            }).then(() => {
+              if (freio == "Dianteiros") {
+                updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+                  manFreioDiant: Number(alertData.kmManFreio)
+                }).then(() => {
+                  this.geradorToast("Manutenção cadastrada!", "checkmark-circle")
+                  load.dismiss()
+                  this.navCtrl.navigateBack('exibir-veiculos')
+                }).catch(() => {
+                  load.dismiss()
+                  this.geradorToast("Algo deu errado, tente novamente", "close-circle")
+                })
+              } else if (freio == "Traseiros") {
+                updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
+                  manFreioTras: Number(alertData.kmManFreio)
+                }).then(() => {
+                  this.geradorToast("Manutenção cadastrada!", "checkmark-circle")
+                  load.dismiss()
+                  this.navCtrl.navigateBack('exibir-veiculos')
+                }).catch(() => {
+                  load.dismiss()
+                  this.geradorToast("Algo deu errado, tente novamente", "close-circle")
+                })
+              }
+            })
+          } else {
             load.dismiss()
-            this.navCtrl.navigateBack('exibir-veiculos')
-          }).catch(() => {
-            load.dismiss()
-            this.toastCadErro()
-          })
-        }else if(freio == "Traseiros"){
-          updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), this.idVeiculo), {
-            manFreioTras: Number(alertData.kmManFreio)
-          }).then(() => {
-            this.toastCadOk()
-            load.dismiss()
-            this.navCtrl.navigateBack('exibir-veiculos')
-          }).catch(() => {
-            load.dismiss()
-            this.toastCadErro()
-          })
-        }
+            this.geradorToast("Preencha o campo obrigatório.", "close-circle")
+          }
         }
       },
       {
         text: "Cancelar",
-        role: "cancel"
+        role: "destructive"
       }]
     })
-    alert.present()
+    if (freio != undefined) {
+      alert.present()
+    }
+
   }
 
   toCadManutencao() {
