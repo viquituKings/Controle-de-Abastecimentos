@@ -10,6 +10,11 @@
     width: 97%;
 }
 
+ion-fab{
+    position: fixed;
+    z-index: 100;
+}
+
 ion-fab-button[desc]::after {
     position: absolute;
     content: attr(desc);
