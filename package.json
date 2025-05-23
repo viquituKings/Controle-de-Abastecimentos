@@ -1,6 +1,6 @@
 {
   "name": "Controle de Abastecimentos",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Reis Software",
   "homepage": "",
   "scripts": {
@@ -44,7 +44,7 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
-    "cordova-android": "^10.1.2",
+    "cordova-android": "^14.0.1",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^5.0.0",

@@ -173,6 +173,11 @@ export class ManutencaoPage implements OnInit {
           type: 'number'
         },
         {
+          name: 'valRev',
+          placeholder: 'Custo da revisão:',
+          type: 'number'
+        },
+        {
           name: 'descRev',
           placeholder: 'Observação: (opcional)',
           type: 'textarea'
@@ -182,12 +187,13 @@ export class ManutencaoPage implements OnInit {
         {
           text: 'Cadastrar',
           handler: (alertData) => {
-            if (alertData.ultimaRev != 0) {
+            if (alertData.ultimaRev != 0 && alertData.valRev != 0) {
               load.present()
               setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
                 tipoManutencao: "Revisão",
                 tipoManutencaoVal: "REVISAO",
                 kmManutencao: alertData.ultimaRev,
+                valManutencao: alertData.valRev,
                 descricaoManutencao: alertData.descRev,
                 dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
                 veiculo: this.veiculo.placa,
@@ -238,6 +244,11 @@ export class ManutencaoPage implements OnInit {
           type: 'number'
         },
         {
+          name: 'valTroleo',
+          placeholder: 'Custo da troca de óleo:',
+          type: 'number'
+        },
+        {
           name: 'descTrOleo',
           placeholder: 'Observação: (opcional)',
           type: 'textarea'
@@ -247,12 +258,13 @@ export class ManutencaoPage implements OnInit {
         {
           text: 'Cadastrar!',
           handler: (alertData) => {
-            if (alertData.ultimaTrOleo != 0) {
+            if (alertData.ultimaTrOleo != 0 && alertData.valTroleo != 0) {
               load.present()
               setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
                 tipoManutencao: "Troca de Óleo",
                 tipoManutencaoVal: "TROLEO",
                 kmManutencao: alertData.ultimaTrOleo,
+                valManutencao: alertData.valTroleo,
                 descricaoManutencao: alertData.descTrOleo,
                 dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
                 veiculo: this.veiculo.placa,
@@ -345,6 +357,11 @@ export class ManutencaoPage implements OnInit {
           placeholder: "Km Manutenção"
         },
         {
+          name: 'valManFreio',
+          placeholder: 'Custo da manutenção no freio:',
+          type: 'number'
+        },
+        {
           name: "descManFreio",
           type: "textarea",
           placeholder: "Observação: (opcional)"
@@ -354,11 +371,12 @@ export class ManutencaoPage implements OnInit {
         text: "Confirmar",
         handler: (alertData) => {
           load.present()
-          if (alertData.kmManFreio != 0) {
+          if (alertData.kmManFreio != 0 && alertData.valManFreio != 0) {
             setDoc(doc(collection(getFirestore(), `users/${this.userEmail}/manutencoes`)), {
               tipoManutencao: "Manutenção nos freios " + freio,
               tipoManutencaoVal: "MANFREIO",
               kmManutencao: alertData.kmManFreio,
+              valManutencao: alertData.valManFreio,
               descricaoManutencao: alertData.descManFreio,
               dataCadastro: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
               veiculo: this.veiculo.placa,
