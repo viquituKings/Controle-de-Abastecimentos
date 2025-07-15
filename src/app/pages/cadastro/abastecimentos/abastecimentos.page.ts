@@ -28,6 +28,8 @@ export class AbastecimentosPage implements OnInit {
   inpKmAtualCadAbast : number = null
   inpQdtAbastecidaCadAbast : number = null
   inpValLitroCadAbast : number = null
+  inpUltimoCombAbast : string = ''
+  inpObsCadAbast : string = ''
 
   ngOnInit() {
     this.menuCtrl.enable(true)
@@ -63,6 +65,7 @@ export class AbastecimentosPage implements OnInit {
     load.present()
     this.inpUltimoKmCadAbast = this.veiculos[this.selectVeiculoCadAbast].kmAtual
     this.inpKmAtualCadAbast = this.veiculos[this.selectVeiculoCadAbast].kmAtual
+    this.inpUltimoCombAbast = this.veiculos[this.selectVeiculoCadAbast].ultimoComb
     load.dismiss()
   }
 
@@ -108,13 +111,16 @@ export class AbastecimentosPage implements OnInit {
           media : (this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
           valorLitro : this.inpValLitroCadAbast,
           combustivel : this.selectCombAbastecido,
+          combustivelAnterior : this.inpUltimoCombAbast,
           seTanqueCheio : this.checkboxTanqueCheio,
           seAditivado : this.checkboxCombAditivado,
-          data : this.dataAbastecimento
+          data : this.dataAbastecimento,
+          observacao: this.inpObsCadAbast
         }).then( sucesso => {
           load.dismiss()
-          this.atualizarKmVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
+          this.atualizarVeiculo(this.veiculos[this.selectVeiculoCadAbast].id);
           this.verificarManPeriodica()
+          this.alertAbastecido()
           this.toastCadastroOk()
           this.toHome()
         }).catch(erro => {
@@ -124,7 +130,21 @@ export class AbastecimentosPage implements OnInit {
       }
   }
 
-  async atualizarKmVeiculo(veiculo : string){
+  async alertAbastecido(){
+    const alerta = await this.alertCtrl.create({
+      header: 'Resumo do abastecimento:',
+      message: `Combustível abastecido: ${this.selectCombAbastecido};` + '\n' +
+      `media de consumo: ${(this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast};` + "\n" +
+      `Valor gasto: R$ ${(this.inpValLitroCadAbast * this.inpQdtAbastecidaCadAbast).toFixed(2)}`,
+      buttons: [{
+        text: 'Entendi',
+        role: 'cancel'
+      }]
+    })
+    alerta.present()
+  }
+
+  async atualizarVeiculo(veiculo : string){
     const load = await this.loadCtrl.create({
       message : 'Atualizando informações do veículo...'
     })
@@ -132,6 +152,7 @@ export class AbastecimentosPage implements OnInit {
     await updateDoc(doc(collection(getFirestore(), `users/${this.email}/veiculos/`), veiculo), {
       ultimoKm : this.inpKmAtualCadAbast,
       kmAtual : this.inpKmAtualCadAbast,
+      ultimoComb : this.selectCombAbastecido
     })
     load.dismiss()
   }

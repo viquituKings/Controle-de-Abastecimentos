@@ -68,6 +68,14 @@ export class VeiculosPage implements OnInit {
   }
 
   async carregarMarcas() {
+    this.inpPlaca1 = ""
+    this.inpPlaca2 = ""
+    this.radioTipoVeiculo = ""
+    this.selectMarca = null
+    this.selectModelo = null
+    this.inpAnoVeiculo = 0
+    this.inpCilindradaVeiculo = 0
+    this.inpKmAtual = 0
     const load = await this.loadCtrl.create({
       message: 'Carregando marcas...'
     })
@@ -116,7 +124,7 @@ export class VeiculosPage implements OnInit {
     load.dismiss()
   }
 
-  async modeloSelecionado(){
+  async modeloSelecionado() {
     const inpAno = document.getElementById("inpAnoCadV").setAttribute("disabled", "false")
     const inpCilindrada = document.getElementById("inpCilindradaCadV").setAttribute("disabled", "false")
     const inpKm = document.getElementById("inpKmCadV").setAttribute("disabled", "false")
@@ -183,7 +191,7 @@ export class VeiculosPage implements OnInit {
     var idVeiculo
     const consulta = await getDocs(collection(getFirestore(), `users/${this.userEmail}/veiculos`))
     consulta.forEach(doc => {
-      if(doc.get('placa') == `${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()}`){
+      if (doc.get('placa') == `${this.inpPlaca1.toUpperCase()}-${this.inpPlaca2.toUpperCase()}`) {
         idVeiculo = doc.id
       }
     })
@@ -204,6 +212,7 @@ export class VeiculosPage implements OnInit {
         {
           text: 'Não',
           handler: () => {
+            this.carregarMarcas()
             this.navCtrl.navigateForward('home')
             this.toastCadastroOk()
           }

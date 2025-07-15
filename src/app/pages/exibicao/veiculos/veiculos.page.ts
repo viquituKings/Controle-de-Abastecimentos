@@ -96,6 +96,7 @@ export class VeiculosPage implements OnInit {
       message : 'Tentando realizar edição...'
     })
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: `Editando ${veiculo.placa}`,
       inputs:[
         {
@@ -176,6 +177,7 @@ export class VeiculosPage implements OnInit {
 
   async alertConfExcluirVeiculo(veiculoId : string){
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: 'Deseja mesmo deletar este veículo?',
       subHeader: 'Esta ação não pode ser desfeita.',
       buttons: [

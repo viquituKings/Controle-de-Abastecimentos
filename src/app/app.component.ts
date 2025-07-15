@@ -10,9 +10,11 @@ export class AppComponent {
   public appPages = [
     { title: 'Página Inicial', url: 'home', icon: 'home' },
     { title: 'Cadastrar Veículos', url: 'cadastro-veiculos', icon: 'add-circle' },
-    { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill' },
     { title: 'Meus Veículos', url: 'exibir-veiculos', icon: 'car' },
+    { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill' },
     { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud' },
+    { title: 'Cadastrar Manutenções', url: 'cadastro-manutencoes', icon: 'build' },
+    
   ];
   constructor(public navCtrl: NavController,
     public menuCtrl: MenuController) { }

@@ -14,6 +14,9 @@
         {{veiculo.placa}}</ion-select-option>
     </ion-select>
 
+    <ion-input class="inputCadComb" label="Último combustível abastecido." labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpUltimoCombAbast" type="text" disabled="true"></ion-input>
+
     <ion-select class="selectCadComb" label="Selecione o combustível abastecido: " labelPlacement="floating"
       fill="outline" [(ngModel)]="selectCombAbastecido" okText="Pronto!" cancelText="Cancelar" required>
       <ion-select-option value="Gasolina">Gasolina</ion-select-option>
@@ -40,6 +43,8 @@
       [(ngModel)]="inpQdtAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
     <ion-input class="inputCadComb" label="Valor do litro (R$): " labelPlacement="floating" fill="outline"
       [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
+      <ion-textarea class="inputCadComb" label="Observação (opcional): " labelPlacement="floating" fill="outline"
+      [(ngModel)]="inpObsCadAbast" autoGrow="true" ></ion-textarea>
     <ion-button class="btnCadComb" color="success" fill="outline" expand="block" (click)="cadastrarAbastecimento()">cadastrar</ion-button>
     <ion-button class="btnCadComb" color="danger" fill="outline" expand="block" (click)="toHome()">cancelar</ion-button>
   </div>

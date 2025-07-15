@@ -28,6 +28,9 @@ export class HomePage implements OnInit {
   toCadAbastecimento(){
     this.navCtrl.navigateForward('cadastro-abastecimentos');
   }
+  toCadManutencao(){
+    this.navCtrl.navigateForward('cadastro-manutencoes');
+  }
 
   toMeusVeiculos(){
     this.navCtrl.navigateForward('exibir-veiculos');

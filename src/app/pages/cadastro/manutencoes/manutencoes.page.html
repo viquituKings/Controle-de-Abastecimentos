@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Cadastro de manutenções</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="center">
+    <ion-select [(ngModel)]="selectVeiculoCadMan" class="input-cad-manutencoes" label="Selecione o veículo: "
+      labelPlacement="floating" fill="outline" okText="Confirmar" cancelText="Cancelar"
+      (ionChange)="habilitaManutencoes()" required="true">
+      <ion-select-option *ngFor="let vei of veiculos" value="{{vei.index}}">{{vei.modelo}} -
+        {{vei.placa}}</ion-select-option>
+    </ion-select>
+    <ion-select [(ngModel)]="selectManutencaoCadMan" id="select-manutencoes" class="input-cad-manutencoes"
+      label="Selecione a manutenção: " labelPlacement="floating" fill="outline" okText="Confirmar" cancelText="Cancelar"
+      (ionChange)="habilitaLado()" required="true" disabled="true">
+      <ion-select-option *ngFor="let man of manutencoes" value="{{man.index}}">{{man.nome}}</ion-select-option>
+    </ion-select>
+    <ion-select [(ngModel)]="selectLadoManutencaoCadMan" id="select-lado" class="input-cad-manutencoes"
+      label="Selecione o lado da manutenção: " labelPlacement="floating" fill="outline" okText="Confirmar"
+      cancelText="Cancelar" [multiple]="true" disabled="true" required="true">
+      <ion-select-option *ngFor="let lado of lados" value="{{lado.valor}}">{{lado.nome}}</ion-select-option>
+    </ion-select>
+    <ion-input [(ngModel)]="inputDataManutencaoCadMan" class="input-cad-manutencoes" label="Data da manutenção: " labelPlacement="floating" type="date"
+      fill="outline" required="true"></ion-input>
+      <ion-input [(ngModel)]="inputKmManutencaoCadMan" class="input-cad-manutencoes" label="Km da manutenção: " labelPlacement="floating" type="number"
+      fill="outline" required="true"></ion-input>
+    <ion-input [(ngModel)]="inputValorManutencaoCadMan" class="input-cad-manutencoes" label="Valor da manutenção: " labelPlacement="floating" type="number"
+      fill="outline" required="true"></ion-input>
+    <ion-textarea [(ngModel)]="inputObsManutencaoCadMan" class="input-cad-manutencoes" label="Observações (opcional): " labelPlacement="floating"
+      fill="outline" autoGrow="true"></ion-textarea>
+    <ion-button (click)="cadastrar()" class="btn-cad-manutencoes" color="success" fill="outline" shape="round">Cadastrar</ion-button>
+    <ion-button (click)="toHome()" class="btn-cad-manutencoes" color="danger" fill="outline" shape="round">Cancelar</ion-button>
+  </div>
+</ion-content>
