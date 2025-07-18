@@ -14,6 +14,7 @@ export class AppComponent {
     { title: 'Cadastrar Abastecimentos', url: 'cadastro-abastecimentos', icon: 'Color-fill' },
     { title: 'Meus Abastecimentos', url: 'exibir-abastecimentos', icon: 'cloud' },
     { title: 'Cadastrar Manutenções', url: 'cadastro-manutencoes', icon: 'build' },
+    { title: 'Minhas Manutenções', url: 'exibir-manutencoes', icon: 'clipboard' },
     
   ];
   constructor(public navCtrl: NavController,

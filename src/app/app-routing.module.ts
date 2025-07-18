@@ -44,17 +44,18 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cadastro/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
   },
   {
-    path: 'exibir-manutencao-periodica',
-    loadChildren: () => import('./pages/exibicao/manutencao/manutencao.module').then( m => m.ManutencaoPageModule)
-  },
-  {
     path: 'info-veiculo',
     loadChildren: () => import('./pages/exibicao/info-veiculo/info-veiculo.module').then( m => m.InfoVeiculoPageModule)
   },
   {
     path: 'cadastro-manutencoes',
     loadChildren: () => import('./pages/cadastro/manutencoes/manutencoes.module').then( m => m.ManutencoesPageModule)
+  },
+  {
+    path: 'exibir-manutencoes',
+    loadChildren: () => import('./pages/exibicao/manutencoes/manutencoes.module').then( m => m.ManutencoesPageModule)
   }
+
 
 
 

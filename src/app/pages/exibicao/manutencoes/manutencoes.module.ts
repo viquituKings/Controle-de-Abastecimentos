@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ManutencaoPageRoutingModule } from './manutencao-routing.module';
+import { ManutencoesPageRoutingModule } from './manutencoes-routing.module';
 
-import { ManutencaoPage } from './manutencao.page';
+import { ManutencoesPage } from './manutencoes.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ManutencaoPageRoutingModule
+    ManutencoesPageRoutingModule
   ],
-  declarations: [ManutencaoPage]
+  declarations: [ManutencoesPage]
 })
-export class ManutencaoPageModule {}
+export class ManutencoesPageModule {}

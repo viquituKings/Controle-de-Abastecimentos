@@ -1,0 +1,16 @@
+#center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3%;
+}
+
+.card-minhas-manutencoes{
+    width: 100%;
+    padding: 2%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-bottom: 3%;
+    background-color: var(--ion-background-color);
+}

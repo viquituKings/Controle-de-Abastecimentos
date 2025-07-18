@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Minhas manutenções</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="center">
+    <ion-select [(ngModel)]="selectVeiculo" class="input-ver-manutencao" fill="outline" label="Selecione o veículo:"
+      labelPlacement="floating" okText="confirmar" cancelText="cancelar" required="true"
+      (ionChange)="carregarManutencoes()">
+      <ion-select-option *ngFor="let vei of veiculos" value="{{vei.index}}">{{vei.modelo}} -
+        {{vei.placa}}</ion-select-option>
+    </ion-select>
+    <ion-card class="card-minhas-manutencoes">
+      <ion-card-header>
+        <ion-card-title>Resumo das manutenções: </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label>Quantidade total de manutenções: {{qtdManutencoes}}</ion-label> <br>
+        <ion-label>Total gasto em manutenções: R$ {{valManutencoes.toFixed(2)}}</ion-label>
+      </ion-card-content>
+    </ion-card>
+    <ion-select [(ngModel)]="selectTipoMan" class="input-ver-manutencao" fill="outline"
+      label="Filtro por tipo de manutenção:" labelPlacement="floating" okText="confirmar" cancelText="cancelar"
+      (ionChange)=carregarManutencoes()>
+      <ion-select-option *ngFor="let man of tiposManutencao" value="{{man.valor}}">{{man.nome}}</ion-select-option>
+    </ion-select>
+    <ion-card class="card-minhas-manutencoes" *ngFor="let man of manutencoes">
+      <ion-card-header>
+        <ion-card-subtitle>{{man.dataCadastro}}</ion-card-subtitle>
+        <ion-card-title>{{man.tipoManutencao}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label>Km da manutenção: {{man.kmManutencao}}</ion-label> <br>
+        <ion-label>Valor da manutenção:R$ {{man.valorManutencao.toFixed(2)}}</ion-label> <br>
+        <ion-label>Lados da manutenção: {{man.ladoManutencao}}</ion-label> <br>
+        <ion-label>Observação: {{man.descricaoManutencao}}</ion-label> <br>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

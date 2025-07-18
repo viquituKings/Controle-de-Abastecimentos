@@ -200,12 +200,6 @@ export class VeiculosPage implements OnInit {
     this.navCtrl.navigateForward('home')
   }
 
-  toManutencao(veiculo : string){
-    this.routerCtrl.navigateByUrl('/exibir-manutencao-periodica', {
-      state: {idVeiculo : veiculo}
-    })
-  }
-
   toInfoVeiculo(veiculo : string){
     this.routerCtrl.navigateByUrl('/info-veiculo', {
       state: {idVeiculo : veiculo}
