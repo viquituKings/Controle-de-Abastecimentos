@@ -10,12 +10,16 @@
           <ion-note>Controle de Abastecimentos</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
+        <!-- <ion-item>
+          <ion-toggle (ionChange)="modoEscuro($event)" justify="space-between">Modo escuro</ion-toggle>
+        </ion-item> -->
         <ion-button color="danger" fill="outline" expand="block" (click)="logout()">sair</ion-button>
         <ion-button fill="outline" expand="block" (click)="comentario()">Comentários</ion-button>
       </ion-content>

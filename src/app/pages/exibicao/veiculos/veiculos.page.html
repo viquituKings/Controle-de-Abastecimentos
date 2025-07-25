@@ -16,6 +16,32 @@
             Ano: {{veiculo.ano}} <br>
             Km Atual: {{veiculo.kmAtual}} <br>
             Cilindrada: {{veiculo.cilindrada}} <br>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-subtitle>Resumo</ion-card-subtitle>
+                <ion-card-title>Abastecimentos</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-label>
+                  Total de abastecimentos: {{veiculo.qtdAbast}}; <br>
+                  Litros abastecidos: {{veiculo.qtdLitros.toFixed(1)}} Litros; <br>
+                  Valor abastecido: R$ {{veiculo.valorAbast.toFixed(2)}}; <br>
+                  Média de consumo: {{(veiculo.mediasAbast / veiculo.qtdAbast).toFixed(2)}} Km/l; <br>
+                </ion-label>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-subtitle>Resumo</ion-card-subtitle>
+                <ion-card-title>Manutenções</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-label>
+                  Quantidade de Manutenções: {{veiculo.qtdMan}}; <br>
+                  Valor total: R$ {{veiculo.gastoManutencao.toFixed(2)}}; <br>
+                </ion-label>
+              </ion-card-content>
+            </ion-card>
             <ion-button color="danger" (click)="alertConfExcluirVeiculo(veiculo.id)">
               <ion-icon name="trash"></ion-icon>
             </ion-button>

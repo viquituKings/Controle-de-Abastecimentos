@@ -52,7 +52,6 @@ export class AbastecimentosPage implements OnInit {
       this.veiculos[i] = doc.data()
       this.veiculos[i].indice = i
       this.veiculos[i].id = doc.id
-      console.log(this.veiculos[i])
       i++
     })
     load.dismiss()
@@ -134,7 +133,7 @@ export class AbastecimentosPage implements OnInit {
     const alerta = await this.alertCtrl.create({
       header: 'Resumo do abastecimento:',
       message: `Combustível abastecido: ${this.selectCombAbastecido};` + '\n' +
-      `media de consumo: ${(this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast};` + "\n" +
+      `media de consumo: ${((this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast).toFixed(2)};` + "\n" +
       `Valor gasto: R$ ${(this.inpValLitroCadAbast * this.inpQdtAbastecidaCadAbast).toFixed(2)}`,
       buttons: [{
         text: 'Entendi',

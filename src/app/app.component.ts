@@ -21,6 +21,7 @@ export class AppComponent {
     public menuCtrl: MenuController) { }
 
   auth = getAuth()
+  toggleDarkMode : boolean = true
 
   logout() {
     signOut(this.auth).then((sucesso) => {
@@ -46,4 +47,19 @@ export class AppComponent {
   comentario() {
     window.location.href = "mailto:sac.reissoftware@gmail.com?subject=Comentários%20sobre%20o%20app%20Controle%20de%20Abastecimentos"
   }
+
+  initializeDarkTheme() {
+    this.toggleDarkTheme(true);
+  }
+
+  modoEscuro(event: CustomEvent) {
+    this.toggleDarkTheme(event.detail.checked);
+  }
+
+  // Add or remove the "dark" class on the document body
+  toggleDarkTheme(shouldAdd: boolean) {
+    document.body.classList.toggle('dark', shouldAdd);
+  }
+
 }
+

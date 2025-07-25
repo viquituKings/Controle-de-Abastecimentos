@@ -11,62 +11,75 @@ import { Router } from '@angular/router';
 })
 export class VeiculosPage implements OnInit {
 
-  constructor(public menuCtrl : MenuController, 
-    public navCtrl : NavController, 
-    public actionSheetCtrl : ActionSheetController, 
-    public alertCtrl : AlertController,
-    public toastCtrl : ToastController,
-    public loadCtrl : LoadingController,
-    public routerCtrl : Router) { }
+  constructor(public menuCtrl: MenuController,
+    public navCtrl: NavController,
+    public actionSheetCtrl: ActionSheetController,
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
+    public loadCtrl: LoadingController,
+    public routerCtrl: Router) { }
 
   auth = getAuth()
-  userEmail : string
-  veiculos  : any[] = []
-  veiculoEditado : string
+  userEmail: string
+  veiculos: any[] = []
+  veiculoEditado: string
 
   ngOnInit() {
     this.menuCtrl.enable(true)
     onAuthStateChanged(this.auth, (usuario) => {
-      if(usuario){
+      if (usuario) {
         this.userEmail = usuario.email
         this.carregarVeiculos()
       }
     })
-    
+
   }
 
-  async carregarVeiculos(){
+  async carregarVeiculos() {
     const load = await this.loadCtrl.create({
-      message : 'Carregando seus veículos...'
+      message: 'Carregando seus veículos...'
     })
     load.present()
     this.veiculos = []
     var i = 0
     const consulta = await getDocs(collection(getFirestore(), `users/${this.userEmail}/veiculos`))
-    if(!consulta.empty){
-      consulta.forEach( doc => {
-          this.veiculos[i] = {
-            placa       : doc.get('placa'),
-            cilindrada  : doc.get('cilindrada'),
-            modelo      : doc.get('modelo'),
-            marca       : doc.get('marca'),
-            ano         : doc.get('ano'),
-            kmAtual     : doc.get('kmAtual'),
-            indice      : i,
-            id          : doc.id,
+    const man = await getDocs(collection(getFirestore(), `users/${this.userEmail}/manutencoes`))
+    const abast = await getDocs(collection(getFirestore(), `users/${this.userEmail}/medias`))
+    if (!consulta.empty) {
+      consulta.forEach(doc => {
+        this.veiculos[i] = doc.data()
+        this.veiculos[i].id = doc.id
+        this.veiculos[i].index = i
+        this.veiculos[i].qtdMan = 0
+        this.veiculos[i].qtdAbast = 0
+        this.veiculos[i].qtdLitros = 0
+        this.veiculos[i].valorAbast = 0
+        this.veiculos[i].mediasAbast = 0
+        man.forEach(doc => {
+          if (doc.get('veiculoId') == this.veiculos[i].id) {
+            this.veiculos[i].qtdMan += 1
           }
-          i++
+        })
+        abast.forEach(doc => {
+          if (doc.get('placa') == this.veiculos[i].placa) {
+            this.veiculos[i].qtdAbast += 1;
+            this.veiculos[i].qtdLitros += doc.get('qdtAbastecida');
+            this.veiculos[i].valorAbast += (doc.get('valorLitro') * doc.get('qdtAbastecida'))
+            this.veiculos[i].mediasAbast += doc.get('media')
+          }
+        })
+        i++
       })
       load.dismiss()
-    }else{
+    } else {
       load.dismiss()
       this.actionSemVeiculos()
     }
   }
 
-  async deletarVeiculo(idVeiculo : string){
+  async deletarVeiculo(idVeiculo: string) {
     const load = await this.loadCtrl.create({
-      message : 'Tentando excluir o veículo...'
+      message: 'Tentando excluir o veículo...'
     })
     load.present()
     await deleteDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), idVeiculo))
@@ -74,31 +87,31 @@ export class VeiculosPage implements OnInit {
         load.dismiss()
         this.toastVeiculoExcluido()
         this.navCtrl.navigateRoot('home')
-      }).catch( erro => {
+      }).catch(erro => {
         load.dismiss()
         console.log(erro)
       })
   }
 
-  async editarVeiculo(indiceVeiculo : number){
+  async editarVeiculo(indiceVeiculo: number) {
     var veiculo = this.veiculos[indiceVeiculo]
     const toastEditado = await this.toastCtrl.create({
-      message : "Edição efetuada com sucesso!",
+      message: "Edição efetuada com sucesso!",
       duration: 1500,
       icon: 'checkmark-circle-outline',
     })
     const toastErro = await this.toastCtrl.create({
-      message : "Não foi possivel editar o veículo",
+      message: "Não foi possivel editar o veículo",
       duration: 1500,
       icon: 'close-circle-outline'
     })
     const load = await this.loadCtrl.create({
-      message : 'Tentando realizar edição...'
+      message: 'Tentando realizar edição...'
     })
     const alert = await this.alertCtrl.create({
       mode: 'ios',
       header: `Editando ${veiculo.placa}`,
-      inputs:[
+      inputs: [
         {
           name: 'novoAnoVeiculo',
           placeholder: 'Ano do veículo',
@@ -113,36 +126,36 @@ export class VeiculosPage implements OnInit {
           min: 50,
         },
       ],
-      buttons:[
-      {
-        text: 'Salvar',
-        handler: (alertData)=>{
-          load.present()
-          if(alertData.novoAnoVeiculo != "" && alertData.novaCilindradaVeiculo != ""){
-            updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), veiculo.id),{
-              ano : alertData.novoAnoVeiculo,
-              cilindrada: alertData.novaCilindradaVeiculo
-            });
-            load.dismiss()
-            toastEditado.present()
-            this.toHome()
-          }else{
-            load.dismiss()
-            toastErro.present()
+      buttons: [
+        {
+          text: 'Salvar',
+          handler: (alertData) => {
+            load.present()
+            if (alertData.novoAnoVeiculo != "" && alertData.novaCilindradaVeiculo != "") {
+              updateDoc(doc(collection(getFirestore(), `users/${this.userEmail}/veiculos`), veiculo.id), {
+                ano: alertData.novoAnoVeiculo,
+                cilindrada: alertData.novaCilindradaVeiculo
+              });
+              load.dismiss()
+              toastEditado.present()
+              this.toHome()
+            } else {
+              load.dismiss()
+              toastErro.present()
+            }
+
           }
-          
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
         }
-      },
-      {
-        text: 'Cancelar',
-        role: 'cancel',
-      }
       ]
     })
     alert.present()
   }
 
-  async actionSemVeiculos(){
+  async actionSemVeiculos() {
     const actionSheet = await this.actionSheetCtrl.create({
       animated: true,
       header: 'Sem veículos...',
@@ -165,44 +178,44 @@ export class VeiculosPage implements OnInit {
     await actionSheet.present()
   }
 
-  async toastVeiculoExcluido(){
+  async toastVeiculoExcluido() {
     const toast = await this.toastCtrl.create({
       message: `Veículo excluído com sucesso!`,
       duration: 1500,
       icon: 'checkmark-circle-outline',
     })
-    
+
     await toast.present()
   }
 
-  async alertConfExcluirVeiculo(veiculoId : string){
+  async alertConfExcluirVeiculo(veiculoId: string) {
     const alert = await this.alertCtrl.create({
       mode: 'ios',
       header: 'Deseja mesmo deletar este veículo?',
       subHeader: 'Esta ação não pode ser desfeita.',
       buttons: [
         {
-        text: 'Sim!',
-        handler: () => {
-          this.deletarVeiculo(veiculoId)
+          text: 'Sim!',
+          handler: () => {
+            this.deletarVeiculo(veiculoId)
+          },
         },
-      },
-      {
-        text: 'Não.',
-        role: 'cancel'
-      }
-    ]
+        {
+          text: 'Não.',
+          role: 'cancel'
+        }
+      ]
     })
     await alert.present()
   }
 
-  toHome(){
+  toHome() {
     this.navCtrl.navigateForward('home')
   }
 
-  toInfoVeiculo(veiculo : string){
+  toInfoVeiculo(veiculo: string) {
     this.routerCtrl.navigateByUrl('/info-veiculo', {
-      state: {idVeiculo : veiculo}
+      state: { idVeiculo: veiculo }
     })
   }
 

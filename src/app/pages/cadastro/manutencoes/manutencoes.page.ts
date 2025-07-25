@@ -113,7 +113,6 @@ export class ManutencoesPage implements OnInit {
       this.veiculos[i].id = doc.id
       i++
     })
-    console.log(this.veiculos)
     load.dismiss()
   }
 
