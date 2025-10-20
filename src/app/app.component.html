@@ -6,7 +6,7 @@
           <ion-avatar (click)="toExibeUsuario()">
             <img src="../assets/avatar.svg" alt="avatar">
           </ion-avatar>
-          <ion-list-header>Bem-Vindo</ion-list-header>
+          <ion-list-header>Bem-Vindo{{nomeUsuario}}</ion-list-header>
           <ion-note>Controle de Abastecimentos</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">

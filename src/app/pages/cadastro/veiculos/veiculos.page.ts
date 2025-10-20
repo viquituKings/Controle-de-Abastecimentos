@@ -26,9 +26,9 @@ export class VeiculosPage implements OnInit {
   radioTipoVeiculo: string = ""
   selectMarca: number = null
   selectModelo: number = null
-  inpAnoVeiculo: number = 0
-  inpCilindradaVeiculo: number = 0
-  inpKmAtual: number = 0
+  inpAnoVeiculo: number = undefined
+  inpCilindradaVeiculo: number = undefined
+  inpKmAtual: number = undefined
   userEmail: string
 
   ngOnInit() {
@@ -70,12 +70,11 @@ export class VeiculosPage implements OnInit {
   async carregarMarcas() {
     this.inpPlaca1 = ""
     this.inpPlaca2 = ""
-    this.radioTipoVeiculo = ""
     this.selectMarca = null
     this.selectModelo = null
-    this.inpAnoVeiculo = 0
-    this.inpCilindradaVeiculo = 0
-    this.inpKmAtual = 0
+    this.inpAnoVeiculo = undefined
+    this.inpCilindradaVeiculo = undefined
+    this.inpKmAtual = undefined
     const load = await this.loadCtrl.create({
       message: 'Carregando marcas...'
     })
@@ -83,7 +82,7 @@ export class VeiculosPage implements OnInit {
     const selMarca = document.getElementById("selectMarcaCadV").setAttribute("disabled", "false")
     this.marcas = []
     var i = 0
-    const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s/`))
+    const consulta = await getDocs(collection(getFirestore(), `marcas-${this.radioTipoVeiculo}s`))
     consulta.forEach(doc => {
       this.marcas[i] = {
         id: i,
@@ -140,7 +139,7 @@ export class VeiculosPage implements OnInit {
       var cilindrada = this.modelos[this.selectModelo].cilindrada;
       this.inpCilindradaVeiculo = cilindrada
     } else {
-      this.inpCilindradaVeiculo = 0
+      this.inpCilindradaVeiculo = undefined
     }
     load.dismiss()
   }
@@ -154,8 +153,8 @@ export class VeiculosPage implements OnInit {
       this.radioTipoVeiculo == '' ||
       this.selectMarca == null ||
       this.selectModelo == null ||
-      this.inpCilindradaVeiculo == 0 ||
-      this.inpAnoVeiculo == 0) {
+      this.inpCilindradaVeiculo == undefined ||
+      this.inpAnoVeiculo == undefined) {
       this.alertCamposVazios()
     } else {
       load.present()

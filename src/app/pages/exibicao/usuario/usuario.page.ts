@@ -50,6 +50,7 @@ export class UsuarioPage implements OnInit {
     })
 
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: 'Editando seu usuário...',
       inputs: [
         {
@@ -63,7 +64,11 @@ export class UsuarioPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Atualizar!',
+          text: 'Cancelar',
+          role: 'destructive'
+        },
+        {
+          text: 'Atualizar',
           handler: (alertData) => {
             load.present()
             if (alertData.novoNome != "" && alertData.novoEmail != "") {
@@ -80,10 +85,6 @@ export class UsuarioPage implements OnInit {
             }
             load.dismiss()
           }
-        },
-        {
-          text: 'Cancelar.',
-          role: 'cancel'
         }
       ]
     })
@@ -93,6 +94,7 @@ export class UsuarioPage implements OnInit {
 
   async alertAvisoApagar() {
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: 'Tem certeza disso?',
       subHeader: 'Você está prestes a excluir sua conta e esta operação não pode ser desfeita.',
       message: 'Todos seus dados pessoais, de veículos e abastecimentos serão apagados.</br> </br> Para continuar, confirme seus dados:',
@@ -110,11 +112,11 @@ export class UsuarioPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Cancelar.',
-          role: 'cancel'
+          text: 'Cancelar',
+          role: 'destructive'
         },
         {
-          text: 'Apagar!',
+          text: 'Apagar',
           handler: (alertData) => {
             reauthenticateWithCredential(this.auth.currentUser, EmailAuthProvider.credential(alertData.email, alertData.senha)).then(() => {
               this.apagarDocumentos()

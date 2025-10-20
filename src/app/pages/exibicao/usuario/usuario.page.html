@@ -1,27 +1,29 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-menu-button slot="start"></ion-menu-button>
     <ion-title>Você</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item>
-    <img src="../../../../assets/avatar.svg" alt="avatar">
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Seu nome</ion-label>
-    <ion-input [(ngModel)]="nomeUsuario" autocomplete="name" inputmode="text" disabled></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Seu email</ion-label>
-    <ion-input [(ngModel)]="emailUsuario" autocomplete="email" inputmode="email" disabled></ion-input>
-  </ion-item>
-  <ion-button (click)="alertEdit()" fill="clear">
-    editar
-    <ion-icon slot="start" name="create"></ion-icon>
-  </ion-button>
-  <ion-button (click)="alertAvisoApagar()" fill="clear" color="danger">
-    Excluir dados
-    <ion-icon slot="start" name="trash"></ion-icon>
-  </ion-button>
+  <div id="center">
+    <div id="img-exibir-usuario">
+      <img src="../../../../assets/avatar.svg" alt="avatar">
+    </div>
+    <ion-input class="input-exibir-usuario" label="Seu nome: " labelPlacement="floating" [(ngModel)]="nomeUsuario"
+      autocomplete="name" fill="outline" inputmode="text" disabled></ion-input>
+
+    <ion-input class="input-exibir-usuario" label="Seu nome: " labelPlacement="floating" [(ngModel)]="emailUsuario"
+      autocomplete="email" fill="outline" inputmode="email" disabled></ion-input>
+    <div id="buttons-exibir-usuario">
+      <ion-button (click)="alertEdit()" fill="clear">
+        editar
+        <ion-icon slot="start" name="create"></ion-icon>
+      </ion-button>
+      <ion-button (click)="alertAvisoApagar()" fill="clear" color="danger">
+        Excluir dados
+        <ion-icon slot="start" name="trash"></ion-icon>
+      </ion-button>
+    </div>
+
+  </div>
 </ion-content>
