@@ -45,8 +45,8 @@ export class HomePage implements OnInit {
       message: "Calculando...",
     })
     load.present()
-    const etanol = parseFloat(this.valEtanol)
-    const gasolina = parseFloat(this.valGasolina)
+    const etanol = parseFloat(this.valEtanol.replace("," , "."))
+    const gasolina = parseFloat(this.valGasolina.replace("," , "."))
 
     const calculo = (etanol*100)/gasolina
 
