@@ -28,16 +28,18 @@ export class UsuarioPage implements OnInit {
 
   async alertLGPD() {
     const alert = await this.alertCtrl.create({
+      mode: 'ios',
       header: "Aviso sobre uso de dados!",
       subHeader: "Dados necessários para cadastro e suas finalidades:",
-      message: "Email: Acesso ao aplicativo e identificação de dados de veículos no Banco de dados; " + "Nome: Identificação do usuário no banco de dados. " + " Aceite este termo para continuar a utilizar a aplicação.",
+      message: "Email: Acesso ao aplicativo e identificação de dados de veículos no Banco de dados; Nome: Identificação do usuário no banco de dados. " + " Aceite este termo para continuar a utilizar a aplicação.",
       buttons: [
         {
           text: "Aceito!",
           role: 'cancel'
         },
         {
-          text: "Recuso!",
+          text: "Recuso.",
+          role: 'destructive',
           handler: () => {
             this.toLogin()
           }

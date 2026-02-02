@@ -50,9 +50,18 @@ export class HomePage implements OnInit {
 
     const calculo = (etanol*100)/gasolina
 
+    var mensagem = ""
+    if (calculo <= 70){
+      mensagem = `O valor do etanol equivale a ${calculo.toFixed(0)}% do valor da gasolina, vale a pena realizar o abastecimento com etanol`
+    } else {
+      mensagem = `O valor do etanol equivale a ${calculo.toFixed(0)}% do valor da gasolina, é melhor abastecer com gasolina`
+    }
+
+
     const alert = await this.alertCtrl.create({
+      mode: "ios",
       header: "Resultado",
-      message: `O valor do Etanol equivale a ${calculo.toFixed(0)}% do valor da Gasolina`,
+      message: mensagem,
       buttons: [
         {
           text: "Ok",

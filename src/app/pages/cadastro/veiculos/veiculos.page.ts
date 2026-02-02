@@ -43,16 +43,18 @@ export class VeiculosPage implements OnInit {
 
   async alertLGPD() {
     const alert = await this.alertCtrl.create({
+      mode: "ios",
       header: 'Aviso sobre uso de dados sensíveis!',
       subHeader: 'Dados necessários para cadastro do veículo e suas finalidades:',
-      message: `Placa: Identificação do veículo no banco de dados </br>Aceite este termo para prosseguir com o cadastro.`,
+      message: `Placa: Identificação do veículo no banco de dados. Aceite este termo para prosseguir com o cadastro.`,
       buttons: [
         {
-          text: 'aceito!',
+          text: 'Aceito!',
           role: 'cancel'
         },
         {
-          text: 'Recuso!',
+          text: 'Recuso.',
+          role: 'destructive',
           handler: () => {
             this.toHome()
           }
