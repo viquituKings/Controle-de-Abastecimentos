@@ -55,16 +55,18 @@ export class VeiculosPage implements OnInit {
         this.veiculos[i].qtdLitros = 0
         this.veiculos[i].valorAbast = 0
         this.veiculos[i].mediasAbast = 0
+        this.veiculos[i].gastoManutencao = 0
         man.forEach(doc => {
           if (doc.get('veiculoId') == this.veiculos[i].id) {
             this.veiculos[i].qtdMan += 1
+            this.veiculos[i].gastoManutencao += parseFloat(doc.get('valorManutencao'))
           }
         })
         abast.forEach(doc => {
           if (doc.get('placa') == this.veiculos[i].placa) {
             this.veiculos[i].qtdAbast += 1;
-            this.veiculos[i].qtdLitros += doc.get('qdtAbastecida');
-            this.veiculos[i].valorAbast += (doc.get('valorLitro') * doc.get('qdtAbastecida'))
+            this.veiculos[i].qtdLitros += parseFloat(doc.get('qdtAbastecida'));
+            this.veiculos[i].valorAbast += (parseFloat(doc.get('valorLitro')) * parseFloat(doc.get('qdtAbastecida')))
             this.veiculos[i].mediasAbast += doc.get('media')
           }
         })

@@ -120,8 +120,8 @@ export class AbastecimentosPage implements OnInit {
     this.valorTotal = 0
     this.quantidadeTotal = 0
     this.medias.forEach(media => {
-      this.valorTotal += (media.valorLitro * media.qdtAbastecida)
-      this.quantidadeTotal += media.qdtAbastecida
+      this.valorTotal += (parseFloat(media.valorLitro) * parseFloat(media.qdtAbastecida))
+      this.quantidadeTotal += parseFloat(media.qdtAbastecida)
       this.mediaTotal += media.media
       control++
     })

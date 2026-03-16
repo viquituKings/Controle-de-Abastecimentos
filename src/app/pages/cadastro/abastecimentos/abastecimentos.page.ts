@@ -26,8 +26,8 @@ export class AbastecimentosPage implements OnInit {
   checkboxCombAditivado: boolean = false
   inpUltimoKmCadAbast : number = null
   inpKmAtualCadAbast : number = null
-  inpQdtAbastecidaCadAbast : number = null
-  inpValLitroCadAbast : number = null
+  inpQdtAbastecidaCadAbast : string = ''
+  inpValLitroCadAbast : string = ''
   inpUltimoCombAbast : string = ''
   inpObsCadAbast : string = ''
 
@@ -94,6 +94,8 @@ export class AbastecimentosPage implements OnInit {
       message : 'Tentando cadastrar o abastecimento'
     })
     load.present()
+    const valorLitro = parseFloat(this.inpValLitroCadAbast.replace("," , "."))
+    const qtdAbastecimento = parseFloat(this.inpQdtAbastecidaCadAbast.replace("," , "."))
     if (this.dataAbastecimento == '' || 
       this.selectVeiculoCadAbast == null || 
       this.selectCombAbastecido  == '' || 
@@ -106,11 +108,11 @@ export class AbastecimentosPage implements OnInit {
           placa : this.veiculos[this.selectVeiculoCadAbast].placa,
           kmAntigo : this.inpUltimoKmCadAbast,
           kmAtual : this.inpKmAtualCadAbast,
-          qdtAbastecida : this.inpQdtAbastecidaCadAbast,
-          media : (this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast,
-          valorLitro : this.inpValLitroCadAbast,
+          qdtAbastecida : qtdAbastecimento,
+          media : (this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / qtdAbastecimento,
+          valorLitro : valorLitro,
           combustivel : this.selectCombAbastecido,
-          combustivelAnterior : this.inpUltimoCombAbast,
+          combustivelAnterior : (this.inpUltimoCombAbast == undefined) ? '' : this.inpUltimoCombAbast,
           seTanqueCheio : this.checkboxTanqueCheio,
           seAditivado : this.checkboxCombAditivado,
           data : this.dataAbastecimento,
@@ -133,8 +135,8 @@ export class AbastecimentosPage implements OnInit {
     const alerta = await this.alertCtrl.create({
       header: 'Resumo do abastecimento:',
       message: `Combustível abastecido: ${this.selectCombAbastecido};` + '\n' +
-      `media de consumo: ${((this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / this.inpQdtAbastecidaCadAbast).toFixed(2)};` + "\n" +
-      `Valor gasto: R$ ${(this.inpValLitroCadAbast * this.inpQdtAbastecidaCadAbast).toFixed(2)}`,
+      `media de consumo: ${((this.inpKmAtualCadAbast - this.inpUltimoKmCadAbast) / parseFloat(this.inpQdtAbastecidaCadAbast.replace(",", "."))).toFixed(2)};` + "\n" +
+      `Valor gasto: R$ ${(parseFloat(this.inpValLitroCadAbast.replace(",", ".")) * parseFloat(this.inpQdtAbastecidaCadAbast.replace(",", "."))).toFixed(2)}`,
       buttons: [{
         text: 'Entendi',
         role: 'cancel'

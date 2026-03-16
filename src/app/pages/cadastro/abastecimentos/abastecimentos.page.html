@@ -40,9 +40,9 @@
         [(ngModel)]="inpKmAtualCadAbast" type="number" required="true"></ion-input>
     </ion-item>
     <ion-input class="inputCadComb" label="Quantidade abastecida (litros): " labelPlacement="floating" fill="outline"
-      [(ngModel)]="inpQdtAbastecidaCadAbast" type="number" min="0" required="true"></ion-input>
+      [(ngModel)]="inpQdtAbastecidaCadAbast" min="0" required="true"></ion-input>
     <ion-input class="inputCadComb" label="Valor do litro (R$): " labelPlacement="floating" fill="outline"
-      [(ngModel)]="inpValLitroCadAbast" type="number" min="0" required="true"></ion-input>
+      [(ngModel)]="inpValLitroCadAbast" min="0" required="true"></ion-input>
       <ion-textarea class="inputCadComb" label="Observação (opcional): " labelPlacement="floating" fill="outline"
       [(ngModel)]="inpObsCadAbast" autoGrow="true" ></ion-textarea>
     <ion-button class="btnCadComb" color="success" fill="outline" expand="block" (click)="cadastrarAbastecimento()">cadastrar</ion-button>
