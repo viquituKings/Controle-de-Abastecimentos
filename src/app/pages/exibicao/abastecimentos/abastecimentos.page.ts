@@ -2,6 +2,13 @@ import { getDocs, collection, getFirestore, deleteDoc, doc } from 'firebase/fire
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MenuController, NavController, ActionSheetController, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
+import Veiculo from 'src/app/types/Veiculo';
+import Abastecimento from 'src/app/types/Abastecimento';
+
+interface VeiculosAbast extends Partial<Veiculo>{
+  id: string,
+  index: number,
+}
 
 @Component({
   selector: 'app-abastecimentos',
@@ -16,22 +23,22 @@ export class AbastecimentosPage implements OnInit {
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
     public loadCtrl: LoadingController,
-    public toastCtrl : ToastController) { }
+    public toastCtrl: ToastController) { }
 
   auth = getAuth()
-  email: string
-  veiculos: any[]
-  medias: any[] = []
-  valorTotal : number = 0
-  quantidadeTotal : number = 0
-  mediaTotal : number = 0
-  selectVeiculoExibeAbast: string
+  email: string = ''
+  veiculos: VeiculosAbast[] = []
+  medias: Abastecimento[] = []
+  valorTotal: number = 0
+  quantidadeTotal: number = 0
+  mediaTotal: number = 0
+  selectVeiculoExibeAbast: string = ''
 
 
   ngOnInit() {
     this.menuCtrl.enable(true)
     onAuthStateChanged(this.auth, usuario => {
-      this.email = usuario.email
+      this.email = usuario?.email
       this.carregarVeiculos()
     })
   }
@@ -48,7 +55,7 @@ export class AbastecimentosPage implements OnInit {
       consulta.forEach(doc => {
         this.veiculos[i] = {
           id: doc.id,
-          indice: i,
+          index: i,
           placa: doc.get('placa'),
           modelo: doc.get('modelo')
         }
@@ -120,21 +127,21 @@ export class AbastecimentosPage implements OnInit {
     this.valorTotal = 0
     this.quantidadeTotal = 0
     this.medias.forEach(media => {
-      this.valorTotal += (parseFloat(media.valorLitro) * parseFloat(media.qdtAbastecida))
-      this.quantidadeTotal += parseFloat(media.qdtAbastecida)
+      this.valorTotal += (media.valorLitro * media.qdtAbastecida)
+      this.quantidadeTotal += media.qdtAbastecida
       this.mediaTotal += media.media
       control++
     })
-    this.mediaTotal = (this.mediaTotal/control)
+    this.mediaTotal = (this.mediaTotal / control)
     load.dismiss()
     if (i == 0) {
       this.alertSemAbastecimentos()
     }
   }
 
-  async alertDeleteMedia(abastecimento : string){
+  async alertDeleteMedia(abastecimento: string) {
     const load = await this.loadCtrl.create({
-      message:'Tentando excluir média...'
+      message: 'Tentando excluir média...'
     })
     const alert = await this.alertCtrl.create({
       header: 'Tem certeza disso?',
@@ -163,7 +170,7 @@ export class AbastecimentosPage implements OnInit {
     await alert.present()
   }
 
-  async toastDeleteOk(){
+  async toastDeleteOk() {
     const toast = await this.toastCtrl.create({
       message: 'Abastecimento excluido!',
       duration: 2000
@@ -171,7 +178,7 @@ export class AbastecimentosPage implements OnInit {
     await toast.present()
   }
 
-  async toastDeleteFail(){
+  async toastDeleteFail() {
     const toast = await this.toastCtrl.create({
       message: 'Algo deu errado!',
       duration: 2000

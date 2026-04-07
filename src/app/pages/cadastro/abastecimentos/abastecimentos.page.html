@@ -10,7 +10,7 @@
     <ion-select class="selectCadComb" label="Selecione o veículo: " labelPlacement="floating"
       [(ngModel)]="selectVeiculoCadAbast" okText="Pronto!" cancelText="Cancelar" fill="outline" required
       (ionChange)="atualizarDados()">
-      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.indice}}">{{veiculo.modelo}} -
+      <ion-select-option *ngFor="let veiculo of veiculos" value="{{veiculo.index}}">{{veiculo.modelo}} -
         {{veiculo.placa}}</ion-select-option>
     </ion-select>
 
