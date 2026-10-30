@@ -1,0 +1,11 @@
+{
+  "android": {
+    "release": {
+      "keystore": "reistechcontroleabast.keystore",
+      "storePassword": "SUA_SENHA_DO_KEYSTORE",
+      "alias": "SEU_ALIAS_DA_CHAVE",
+      "password": "SUA_SENHA_DO_ALIAS",
+      "keystoreType": ""
+    }
+  }
+}
